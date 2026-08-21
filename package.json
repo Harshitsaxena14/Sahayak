@@ -1,0 +1,26 @@
+{
+  "name": "sahayak-sih2026",
+  "version": "1.0.0",
+  "description": "SAHAYAK — Multilingual Voice-First AI Government & Citizen Assistant (SIH 2026)",
+  "main": "server/src/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "seed": "npm run seed --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "sih2026",
+    "governance",
+    "ai",
+    "voice-first",
+    "multilingual",
+    "rag"
+  ],
+  "author": "SAHAYAK Team",
+  "license": "MIT"
+}
