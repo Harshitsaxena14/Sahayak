@@ -1,0 +1,431 @@
+{
+  "schemes": [
+    {
+      "schemeId": "SCH-001",
+      "name": "PM Kisan Samman Nidhi (PM-KISAN)",
+      "hindiName": "प्रधानमंत्री किसान सम्मान निधि",
+      "ministry": "Ministry of Agriculture & Farmers Welfare",
+      "sector": "Agriculture",
+      "description": "Financial assistance of ₹6,000 per year provided in three equal installments of ₹2,000 directly into the bank accounts of land-holding farmer families across India.",
+      "purpose": "To supplement financial needs of farmers for procuring agricultural inputs and domestic needs.",
+      "targetBeneficiaries": "Small & Marginal Farmers with cultivable landholding up to 2 hectares.",
+      "eligibility": {
+        "minAge": 18,
+        "maxAge": 75,
+        "maxIncome": 250000,
+        "occupation": [
+          "Farmer",
+          "Agriculturalist",
+          "Landowner"
+        ],
+        "gender": "All",
+        "customCriteria": [
+          "Must hold cultivable agricultural land in their name",
+          "Must not be an institutional landholder or high-income taxpayer"
+        ]
+      },
+      "benefits": [
+        "₹6,000 direct benefit transfer (DBT) per year",
+        "Paid in 3 equal installments of ₹2,000 every 4 months",
+        "Direct credit to Aadhaar-linked bank account"
+      ],
+      "documentsRequired": [
+        "Aadhaar Card",
+        "Land Ownership Documents (Khatauni / Khasra)",
+        "Aadhaar-linked Bank Passbook / Account details",
+        "Active Mobile Number"
+      ],
+      "applicationSteps": [
+        "Visit official PM-KISAN portal (pmkisan.gov.in) or nearest CSC center",
+        "Click on 'Farmers Corner' -> 'New Farmer Registration'",
+        "Enter Aadhaar number and state details for verification",
+        "Upload land ownership details and submit application"
+      ],
+      "officialUrl": "https://pmkisan.gov.in",
+      "sourceMetadata": "Verified from PM-KISAN Official Gazette & Portal (Ministry of Agriculture)"
+    },
+    {
+      "schemeId": "SCH-002",
+      "name": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (PM-JAY)",
+      "hindiName": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना",
+      "ministry": "Ministry of Health & Family Welfare",
+      "sector": "Healthcare",
+      "description": "World's largest government-funded healthcare scheme providing secondary and tertiary hospitalization cover of ₹5 Lakh per family per year.",
+      "purpose": "To protect vulnerable families from catastrophic health expenditures and ensure quality medical treatment.",
+      "targetBeneficiaries": "Low-income families identified under SECC 2011 data, informal workers, and rural households.",
+      "eligibility": {
+        "minAge": 0,
+        "maxAge": 100,
+        "maxIncome": 180000,
+        "occupation": [
+          "All",
+          "Laborer",
+          "Vendor",
+          "Farmer"
+        ],
+        "gender": "All",
+        "customCriteria": [
+          "Family listed in SECC 2011 database or holding RSBY card",
+          "Kutcha house / informal employment status"
+        ]
+      },
+      "benefits": [
+        "Cashless & paperless medical coverage up to ₹5,000,000 per family per year",
+        "Covers pre and post-hospitalization expenses for 1,900+ procedures",
+        "Applicable across all empaneled public & private hospitals in India"
+      ],
+      "documentsRequired": [
+        "Aadhaar Card or Ration Card",
+        "Family ID / SECC registration proof",
+        "Active Mobile Number"
+      ],
+      "applicationSteps": [
+        "Check eligibility on mera.pmjay.gov.in using mobile number or Ration Card",
+        "Visit any empaneled hospital or nearest CSC / Ayushman Kendra",
+        "Complete e-KYC biometric verification with Ayushman Mitra",
+        "Receive digital Ayushman Golden Card"
+      ],
+      "officialUrl": "https://pmjay.gov.in",
+      "sourceMetadata": "Verified from National Health Authority (NHA) PM-JAY Official Portal"
+    },
+    {
+      "schemeId": "SCH-003",
+      "name": "Pradhan Mantri Awas Yojana - Urban & Gramin (PMAY)",
+      "hindiName": "प्रधानमंत्री आवास योजना",
+      "ministry": "Ministry of Housing and Urban Affairs / Rural Development",
+      "sector": "Housing",
+      "description": "Financial subsidy and assistance provided to homeless families and households living in kutcha or dilapidated houses to construct a pucca house with basic amenities.",
+      "purpose": "To provide affordable pucca housing with water connection, sanitation, and electricity for all eligible families.",
+      "targetBeneficiaries": "Economically Weaker Section (EWS), Low Income Group (LIG), and rural homeless households.",
+      "eligibility": {
+        "minAge": 21,
+        "maxAge": 70,
+        "maxIncome": 300000,
+        "occupation": [
+          "All"
+        ],
+        "gender": "All",
+        "customCriteria": [
+          "Beneficiary family must not own a pucca house anywhere in India",
+          "Female head of family preferred as co-owner"
+        ]
+      },
+      "benefits": [
+        "Up to ₹2.67 Lakh interest subsidy under Credit Linked Subsidy Scheme (CLSS)",
+        "Direct financial grant of ₹1.20 Lakh to ₹1.30 Lakh for rural house construction",
+        "Integrated toilets under Swachh Bharat Mission grant"
+      ],
+      "documentsRequired": [
+        "Aadhaar Card",
+        "Income Certificate (issued by competent authority)",
+        "Bank Account details",
+        "Proof of no pucca house ownership (Self-declaration affidavit)",
+        "Land ownership or site allotment document"
+      ],
+      "applicationSteps": [
+        "Visit pmaymis.gov.in or Gram Panchayat office",
+        "Select application category (Citizen Assessment -> Benefit under 3 components)",
+        "Fill personal details, income proof, and bank details",
+        "Submit and record Application Tracking ID"
+      ],
+      "officialUrl": "https://pmaymis.gov.in",
+      "sourceMetadata": "Verified from Ministry of Housing and Urban Affairs Official Guidelines"
+    },
+    {
+      "schemeId": "SCH-004",
+      "name": "Post-Matric Scholarship for SC/ST/OBC Students",
+      "hindiName": "उत्तर प्रदेश / राष्ट्रीय पोस्ट-मैट्रिक छात्रवृत्ति",
+      "ministry": "Ministry of Social Justice and Empowerment",
+      "sector": "Education",
+      "description": "Financial assistance provided to SC, ST, and OBC students pursuing post-secondary/higher education (Class 11 to Ph.D.) to meet educational fees and maintenance allowance.",
+      "purpose": "To boost higher education enrolment among marginalized communities and lower dropout rates.",
+      "targetBeneficiaries": "Students belonging to SC, ST, and OBC categories enrolled in recognized post-secondary courses.",
+      "eligibility": {
+        "minAge": 15,
+        "maxAge": 35,
+        "maxIncome": 250000,
+        "occupation": [
+          "Student"
+        ],
+        "gender": "All",
+        "customCriteria": [
+          "Must have passed Class 10/Matriculation from a recognized Board",
+          "Enrolled in a recognized college/university degree or diploma"
+        ]
+      },
+      "benefits": [
+        "100% compulsory non-refundable fee reimbursement (tuition fees)",
+        "Monthly maintenance allowance up to ₹1,200/month for day scholars and ₹4,000/month for hostellers",
+        "Additional allowance for disabled students"
+      ],
+      "documentsRequired": [
+        "Aadhaar Card",
+        "Caste Certificate (issued by Tehsildar/SDM)",
+        "Income Certificate",
+        "Mark sheets of previous qualifying examination",
+        "College Fee Receipt & Student ID",
+        "Aadhaar-seeded Bank Passbook"
+      ],
+      "applicationSteps": [
+        "Register on National Scholarship Portal (scholarships.gov.in)",
+        "Fill student profile, academic credentials, and caste details",
+        "Upload verified documents and select college institution",
+        "Submit application for verification by College Nodal Officer"
+      ],
+      "officialUrl": "https://scholarships.gov.in",
+      "sourceMetadata": "Verified from National Scholarship Portal (NSP) Directives"
+    },
+    {
+      "schemeId": "SCH-005",
+      "name": "PM Street Vendor's AtmaNirbhar Nidhi (PM SVANidhi)",
+      "hindiName": "पीएम स्ट्रीट वेंडर्स आत्मनिर्भर निधि (पीएम स्वनिधि)",
+      "ministry": "Ministry of Housing and Urban Affairs",
+      "sector": "Employment & Business",
+      "description": "Special micro-credit facility providing collateral-free working capital loans of ₹10,000, ₹20,000, and ₹50,000 to street vendors to restart their livelihoods.",
+      "purpose": "To empower street vendors with affordable credit, interest subsidies, and digital transaction cashbacks.",
+      "targetBeneficiaries": "Street vendors, hawkers, cobblers, fruit/vegetable sellers operating in urban areas.",
+      "eligibility": {
+        "minAge": 18,
+        "maxAge": 65,
+        "maxIncome": 300000,
+        "occupation": [
+          "Vendor",
+          "Hawker",
+          "Small Trader",
+          "Self-Employed"
+        ],
+        "gender": "All",
+        "customCriteria": [
+          "Possess Certificate of Vending / Identity Card issued by Urban Local Bodies (ULBs) or Recommendation Letter"
+        ]
+      },
+      "benefits": [
+        "Initial micro-loan of ₹10,000 with 7% per annum interest subsidy",
+        "Enhanced 2nd loan of ₹20,000 and 3rd loan of ₹50,000 on timely repayment",
+        "Cashback up to ₹1,200/year on digital payment transactions"
+      ],
+      "documentsRequired": [
+        "Aadhaar Card",
+        "Certificate of Vending (CoV) or ULB Recommendation Letter",
+        "Voter ID / Bank Passbook",
+        "Mobile number linked with Aadhaar"
+      ],
+      "applicationSteps": [
+        "Visit pmsvanidhi.mohua.gov.in portal or approach local bank branch",
+        "Check vendor status using Aadhaar or Certificate of Vending number",
+        "Fill online loan application form and choose preferred Lending Institution",
+        "Bank verifies credentials and dispatches loan directly to bank account"
+      ],
+      "officialUrl": "https://pmsvanidhi.mohua.gov.in",
+      "sourceMetadata": "Verified from PM SVANidhi Portal & Ministry of Housing"
+    },
+    {
+      "schemeId": "SCH-006",
+      "name": "Sukanya Samriddhi Yojana (SSY)",
+      "hindiName": "सुकन्या समृद्धि योजना",
+      "ministry": "Ministry of Women and Child Development & Finance",
+      "sector": "Women & Child Welfare",
+      "description": "Government-backed small savings scheme specifically designed for girl children to build a financial corpus for their higher education and marriage.",
+      "purpose": "To promote financial security for female children and incentivize parents for girl child education.",
+      "targetBeneficiaries": "Girl children under 10 years of age (opened by parents/legal guardians).",
+      "eligibility": {
+        "minAge": 0,
+        "maxAge": 10,
+        "maxIncome": 1000000,
+        "occupation": [
+          "Child",
+          "Girl Student"
+        ],
+        "gender": "Female",
+        "customCriteria": [
+          "Account can be opened from birth till the girl turns 10 years old",
+          "Maximum 2 accounts per family (or 3 in case of twins/triplets)"
+        ]
+      },
+      "benefits": [
+        "Attractive tax-free interest rate (currently 8.2% per annum compounding annually)",
+        "Tax exemption under Section 80C up to ₹1.5 Lakh per year",
+        "Partial withdrawal allowed up to 50% for higher education after girl attains 18 years"
+      ],
+      "documentsRequired": [
+        "Birth Certificate of Girl Child",
+        "Identity & Address Proof of Parent/Guardian (Aadhaar/PAN)",
+        "Passport size photos of child and parent"
+      ],
+      "applicationSteps": [
+        "Visit any Post Office branch or authorized commercial bank (SBI, PNB, etc.)",
+        "Fill Sukanya Samriddhi account opening form",
+        "Submit documents along with initial deposit (minimum ₹250)",
+        "Receive physical SSY Passbook"
+      ],
+      "officialUrl": "https://www.indiapost.gov.in",
+      "sourceMetadata": "Verified from India Post & Ministry of Finance Gazette Notification"
+    },
+    {
+      "schemeId": "SCH-007",
+      "name": "Indira Gandhi National Old Age Pension Scheme (IGNOAPS)",
+      "hindiName": "इंदिरा गांधी राष्ट्रीय वृद्धावस्था पेंशन योजना",
+      "ministry": "Ministry of Rural Development",
+      "sector": "Senior Citizens & Social Welfare",
+      "description": "Monthly pension allowance provided to senior citizens living below the poverty line (BPL) to support their living expenses.",
+      "purpose": "To provide social security and dignity to destitute senior citizens.",
+      "targetBeneficiaries": "Senior citizens aged 60 years and above belonging to BPL households.",
+      "eligibility": {
+        "minAge": 60,
+        "maxAge": 110,
+        "maxIncome": 120000,
+        "occupation": [
+          "Senior Citizen",
+          "Retired",
+          "Unemployed"
+        ],
+        "gender": "All",
+        "customCriteria": [
+          "Applicant must belong to a household listed under the BPL category",
+          "Must not be receiving pension from state/central government pension rules"
+        ]
+      },
+      "benefits": [
+        "Monthly pension of ₹500 to ₹1,000/month (varies by age group and state top-up grants)",
+        "Direct Bank Transfer directly into senior citizen's account",
+        "Free medical checkups at District Government Hospitals"
+      ],
+      "documentsRequired": [
+        "Aadhaar Card",
+        "Age Proof (Birth certificate/Voter ID/School certificate)",
+        "BPL Card / Income Certificate",
+        "Bank Account Passbook (Aadhaar linked)"
+      ],
+      "applicationSteps": [
+        "Apply through Social Welfare Department or local Tehsil / Block Development Office (BDO)",
+        "Submit pension application form with BPL documentation",
+        "Verification by Gram Panchayat Secretary / Municipal Officer",
+        "Sanction letter issued and pension credited monthly"
+      ],
+      "officialUrl": "https://nsap.nic.in",
+      "sourceMetadata": "Verified from National Social Assistance Programme (NSAP) Portal"
+    }
+  ],
+  "grievances": [
+    {
+      "ticketId": "GRV-2026-894102",
+      "category": "Water Supply",
+      "department": "Municipal Jal Board",
+      "location": "Ward 12, Subhash Nagar, North District",
+      "duration": "3 days",
+      "description": "No municipal tap water supply for the past 3 days. Residents are facing severe drinking water shortage and tanker supply has not arrived.",
+      "citizenPhone": "+91 98765 43210",
+      "status": "In Progress",
+      "priority": "High",
+      "assignedOfficer": "Ramesh Sharma (Executive Engineer)",
+      "history": [
+        {
+          "status": "Registered",
+          "updatedAt": "2026-08-19T13:34:01.788Z",
+          "notes": "Complaint registered via Sahayak AI Assistant",
+          "updatedBy": "System"
+        },
+        {
+          "status": "Assigned",
+          "updatedAt": "2026-08-20T13:34:01.788Z",
+          "notes": "Assigned to Municipal Jal Board Division 4",
+          "updatedBy": "System Router"
+        },
+        {
+          "status": "In Progress",
+          "updatedAt": "2026-08-21T13:34:01.788Z",
+          "notes": "Pipeline leak detected near Main Feeder 3. Repair crew dispatched.",
+          "updatedBy": "Ramesh Sharma"
+        }
+      ],
+      "resolutionNotes": ""
+    },
+    {
+      "ticketId": "GRV-2026-772159",
+      "category": "Electricity",
+      "department": "State Power Distribution Corporation (DISCOM)",
+      "location": "Block C, Gandhi Colony",
+      "duration": "12 hours",
+      "description": "Transformer spark resulted in low voltage and frequent tripping in Block C since morning. Need immediate electrician inspection.",
+      "citizenPhone": "+91 98123 45678",
+      "status": "Registered",
+      "priority": "High",
+      "assignedOfficer": "Unassigned",
+      "history": [
+        {
+          "status": "Registered",
+          "updatedAt": "2026-08-22T09:34:01.788Z",
+          "notes": "Complaint registered via Sahayak AI Assistant",
+          "updatedBy": "System"
+        }
+      ],
+      "resolutionNotes": ""
+    },
+    {
+      "ticketId": "GRV-2026-610482",
+      "category": "Roads & Potholes",
+      "department": "Public Works Department (PWD)",
+      "location": "Station Road near Central Flyover Junction",
+      "duration": "2 weeks",
+      "description": "Deep dangerous pothole created after heavy rainfall causing traffic slowdown and two-wheeler skid accidents.",
+      "citizenPhone": "+91 97111 22233",
+      "status": "Resolved",
+      "priority": "Medium",
+      "assignedOfficer": "Amit Verma (Junior Engineer PWD)",
+      "history": [
+        {
+          "status": "Registered",
+          "updatedAt": "2026-08-16T13:34:01.788Z",
+          "notes": "Complaint registered via Sahayak Assistant",
+          "updatedBy": "System"
+        },
+        {
+          "status": "Assigned",
+          "updatedAt": "2026-08-17T13:34:01.788Z",
+          "notes": "Assigned to PWD Central Zone",
+          "updatedBy": "System Router"
+        },
+        {
+          "status": "In Progress",
+          "updatedAt": "2026-08-19T13:34:01.788Z",
+          "notes": "Road patching work order issued",
+          "updatedBy": "Amit Verma"
+        },
+        {
+          "status": "Resolved",
+          "updatedAt": "2026-08-21T13:34:01.788Z",
+          "notes": "Pothole filled with cold asphalt mix and surface leveled. Inspection photo verified.",
+          "updatedBy": "Amit Verma"
+        }
+      ],
+      "resolutionNotes": "Pothole successfully repaired on 20th August 2026. Surface inspection verified clean flow."
+    },
+    {
+      "ticketId": "GRV-2026-449103",
+      "category": "Sanitation & Garbage",
+      "department": "Municipal Sanitation Department",
+      "location": "Market Complex, Sector 4",
+      "duration": "4 days",
+      "description": "Garbage bin overflowing near market entry. Waste collection truck has not visited for 4 days creating foul smell.",
+      "citizenPhone": "+91 99555 66778",
+      "status": "Assigned",
+      "priority": "Medium",
+      "assignedOfficer": "Sanjay Kumar (Sanitation Inspector)",
+      "history": [
+        {
+          "status": "Registered",
+          "updatedAt": "2026-08-20T13:34:01.788Z",
+          "notes": "Complaint registered via Sahayak AI Assistant",
+          "updatedBy": "System"
+        },
+        {
+          "status": "Assigned",
+          "updatedAt": "2026-08-21T13:34:01.788Z",
+          "notes": "Assigned to Sector 4 Sanitation Crew",
+          "updatedBy": "System Router"
+        }
+      ],
+      "resolutionNotes": ""
+    }
+  ]
+}

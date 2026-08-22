@@ -57,3 +57,11 @@ npm run dev
 - **Frontend:** React, Vite, Tailwind CSS, Lucide React, i18next, Web Speech API
 - **Backend:** Node.js, Express.js, MongoDB / Memory Fallback, Mongoose, JWT
 - **AI Orchestration & RAG:** Custom modular intent classifier, single-turn slot filler, vector/keyword grounding engine with explicit source citation.
+
+---
+
+## 🆕 Recent Changes
+- **Backend Restructuring:** Flattened the `server` directory by removing the `src` folder and promoting `models`, `routes`, `services`, and `data` to the `server` root.
+- **Simplified Architecture:** Removed complex RAG/Orchestrator services and replaced them with a lightweight, streamlined AI service (`services/ai.js`).
+- **Static Data Integration:** Replaced the MongoDB seeding logic with a static `schemes.json` data file to make setup easier and faster.
+- **Route Consolidation:** Simplified routing logic to focus on core `schemes.js` and `grievances.js` endpoints.
