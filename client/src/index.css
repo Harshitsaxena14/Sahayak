@@ -6,22 +6,50 @@
   html {
     font-size: 16px;
     scroll-behavior: smooth;
-  }
-  
-  body {
-    background-color: #FDFBF7;
-    color: #0F172A;
-    line-height: 1.6;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  /* Accessible Focus Ring */
+  body {
+    background-color: #FAF8F5;
+    color: #0F172A;
+    line-height: 1.65;
+    font-family: 'Plus Jakarta Sans', 'Inter', 'Noto Sans Devanagari', sans-serif;
+  }
+
   *:focus-visible {
-    outline: 3px solid #D97706;
+    outline: 2px solid #FF8A00;
     outline-offset: 2px;
   }
 }
 
-/* Reduced Motion Override for Accessibility */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+@keyframes orb-pulse {
+  0% { transform: scale(0.96); opacity: 0.85; }
+  50% { transform: scale(1.1); opacity: 0.45; }
+  100% { transform: scale(0.96); opacity: 0.85; }
+}
+
+.animate-orb-pulse {
+  animation: orb-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

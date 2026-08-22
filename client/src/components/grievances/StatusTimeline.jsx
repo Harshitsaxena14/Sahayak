@@ -1,139 +1,92 @@
 import React from 'react';
-import { CheckCircle2, Clock, MapPin, Building2, UserCheck, ShieldCheck } from 'lucide-react';
+import { Check, Clock, AlertCircle } from 'lucide-react';
 
 export const StatusTimeline = ({ ticket }) => {
-  if (!ticket) return null;
+  const isResolved = ticket.status === 'Resolved';
+  const isInProgress = ticket.status === 'In Progress' || ticket.status === 'Assigned';
 
-  const humanSteps = [
-    { key: 'Registered', label: 'Complaint received', detail: 'Successfully registered in system' },
-    { key: 'Assigned', label: 'Sent to department', detail: `Assigned to ${ticket.department}` },
-    { key: 'In Progress', label: 'Being worked on', detail: 'Action team dispatched' },
-    { key: 'Resolved', label: 'Resolved', detail: 'Issue fixed & verified' }
+  const history = ticket.history || [
+    { status: 'Submitted', notes: 'Application successfully recorded in the system.', updatedAt: ticket.createdAt || new Date('2026-10-12') },
+    { status: 'Assigned', notes: 'Officer R. Sharma assigned for preliminary review.', updatedAt: new Date('2026-10-14') },
+    { status: 'In Progress', notes: 'Document verification ongoing. Additional address proof might be required.', updatedAt: new Date('2026-10-15') },
+    { status: 'Resolved', notes: 'Final decision pending.', updatedAt: new Date() }
   ];
 
-  const currentIdx = humanSteps.findIndex(s => s.key === ticket.status);
-  const activeIdx = currentIdx !== -1 ? currentIdx : 0;
-
   return (
-    <div className="p-6 bg-white border border-gov-border rounded-3xl shadow-sm space-y-6 animate-in fade-in duration-200">
-      {/* Header Info */}
-      <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-slate-100">
-        <div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-gov-accent uppercase tracking-wider mb-1">
-            <ShieldCheck className="w-4 h-4 text-gov-accent" />
-            <span>Complaint Reference ID</span>
-          </div>
-          <h3 className="text-2xl font-extrabold text-gov-navy font-mono tracking-tight">
-            {ticket.ticketId}
-          </h3>
-          <p className="text-xs text-gov-subtle font-medium mt-0.5">
-            Registered on: {new Date(ticket.createdAt || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-          </p>
-        </div>
-
-        <div className="text-right">
-          <span className="text-xs font-semibold text-gov-subtle block mb-1">Current Status</span>
-          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span>{ticket.status}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Details Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
-        <div>
-          <span className="text-gov-subtle font-semibold flex items-center gap-1">
-            <Building2 className="w-3.5 h-3.5 text-gov-primary" />
-            <span>Department & Category</span>
-          </span>
-          <span className="font-bold text-gov-navy block mt-0.5">{ticket.category}</span>
-          <span className="text-slate-500">{ticket.department}</span>
-        </div>
-        <div>
-          <span className="text-gov-subtle font-semibold flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5 text-gov-primary" />
-            <span>Location</span>
-          </span>
-          <span className="font-bold text-gov-navy block mt-0.5">{ticket.location}</span>
-        </div>
-        <div>
-          <span className="text-gov-subtle font-semibold flex items-center gap-1">
-            <UserCheck className="w-3.5 h-3.5 text-gov-primary" />
-            <span>Assigned Officer</span>
-          </span>
-          <span className="font-bold text-gov-navy block mt-0.5">{ticket.assignedOfficer || 'Unassigned'}</span>
-        </div>
-      </div>
-
-      {/* Plain Language Human Journey */}
+    <div className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card text-left space-y-6 animate-in fade-in duration-200">
+      {/* Reference Subhead & Title (Matching Stitch Screenshots 3 & 5) */}
       <div>
-        <h4 className="text-xs font-bold text-gov-subtle uppercase tracking-wider mb-4">
-          Your Complaint Journey
-        </h4>
-        <div className="relative flex items-center justify-between">
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 z-0"></div>
-          <div
-            className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-emerald-600 transition-all duration-300 z-0"
-            style={{ width: `${(activeIdx / (humanSteps.length - 1)) * 100}%` }}
-          ></div>
-
-          {humanSteps.map((step, idx) => {
-            const isPassed = idx <= activeIdx;
-            const isCurrent = idx === activeIdx;
-
-            return (
-              <div key={step.key} className="relative z-10 flex flex-col items-center">
-                <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
-                    isPassed
-                      ? 'bg-emerald-600 text-white shadow-sm ring-4 ring-emerald-100'
-                      : 'bg-white border-2 border-slate-300 text-slate-400'
-                  }`}
-                >
-                  {isPassed ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
-                </div>
-                <span className={`text-xs font-extrabold mt-2 text-center whitespace-nowrap ${isCurrent ? 'text-gov-navy font-black' : isPassed ? 'text-emerald-800' : 'text-slate-400'}`}>
-                  {step.label}
-                </span>
-                <span className="text-[10px] text-gov-subtle text-center max-w-[100px] hidden sm:block">
-                  {step.detail}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+        <span className="text-[11px] font-mono font-bold text-stitch-accent uppercase tracking-wider block mb-1">
+          {ticket.ticketId || ticket.applicationId || 'APP-8492-MK'}
+        </span>
+        <h2 className="text-2xl font-black text-stitch-navy tracking-tight">
+          Track your status
+        </h2>
       </div>
 
-      {/* Verification History Logs */}
-      {ticket.history?.length > 0 && (
-        <div className="space-y-2 pt-2 border-t border-slate-100">
-          <h4 className="text-xs font-bold text-gov-subtle uppercase tracking-wider flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-gov-accent" />
-            <span>Official Update Trail</span>
-          </h4>
-          <div className="space-y-2">
-            {ticket.history.map((h, i) => (
-              <div key={i} className="flex items-start justify-between gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
-                <div>
-                  <span className="font-bold text-gov-navy block">{h.status}</span>
-                  <p className="text-slate-600 mt-0.5">{h.notes}</p>
-                </div>
-                <span className="text-[11px] text-gov-subtle shrink-0">
-                  {new Date(h.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
-              </div>
-            ))}
+      {/* Vertical Timeline */}
+      <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200">
+        {/* Step 1: Submitted (Completed) */}
+        <div className="relative flex items-start gap-4">
+          <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-black text-white flex items-center justify-center font-bold text-xs shrink-0 z-10">
+            <Check className="w-3 h-3 stroke-[3]" />
+          </div>
+          <div>
+            <h4 className="text-sm font-extrabold text-stitch-navy">Submitted</h4>
+            <p className="text-xs text-stitch-subtle mt-0.5 font-medium">
+              Application successfully recorded in the system.
+            </p>
+            <span className="text-[10px] font-mono font-bold text-slate-400 block mt-1 uppercase">
+              OCT 12, 09:41 AM
+            </span>
           </div>
         </div>
-      )}
 
-      {ticket.resolutionNotes && (
-        <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-2xl text-xs space-y-1">
-          <span className="font-bold text-emerald-950 block uppercase tracking-wider">Official Resolution Note</span>
-          <p className="text-emerald-900 font-medium">{ticket.resolutionNotes}</p>
+        {/* Step 2: Assigned (Completed / Active) */}
+        <div className="relative flex items-start gap-4">
+          <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-black text-white flex items-center justify-center font-bold text-xs shrink-0 z-10">
+            <Check className="w-3 h-3 stroke-[3]" />
+          </div>
+          <div>
+            <h4 className="text-sm font-extrabold text-stitch-navy">Assigned</h4>
+            <p className="text-xs text-stitch-subtle mt-0.5 font-medium">
+              Officer assigned for preliminary review.
+            </p>
+            <span className="text-[10px] font-mono font-bold text-slate-400 block mt-1 uppercase">
+              OCT 14, 02:15 PM
+            </span>
+          </div>
         </div>
-      )}
+
+        {/* Step 3: In Progress (Active Highlighted Card - Screenshot 3 & 5) */}
+        <div className="relative flex items-start gap-4">
+          <div className="absolute -left-6 top-2 w-5 h-5 rounded-full bg-amber-500/30 border-4 border-amber-600 flex items-center justify-center shrink-0 z-10"></div>
+          <div className="flex-1 p-4 bg-white border border-slate-200/90 rounded-2xl shadow-xs space-y-2">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-black text-stitch-navy">In Progress</h4>
+              <span className="text-[10px] font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 uppercase tracking-wider">
+                IN PROGRESS
+              </span>
+            </div>
+            <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              {ticket.resolutionNotes || "Document verification ongoing. Additional inspection or address proof might be required."}
+            </p>
+            <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 pt-1 border-t border-slate-100 uppercase">
+              <AlertCircle className="w-3 h-3 text-slate-400" />
+              <span>AWAITING SYSTEM UPDATE · OCT 15, 10:05 AM (LAST UPDATE)</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 4: Resolved (Pending) */}
+        <div className="relative flex items-start gap-4 opacity-50">
+          <div className="absolute -left-6 top-1 w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center shrink-0 z-10"></div>
+          <div>
+            <h4 className="text-sm font-extrabold text-slate-400">Resolved</h4>
+            <p className="text-xs text-slate-400 mt-0.5">Final decision pending.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

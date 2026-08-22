@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from '../common/Modal';
 import { useLanguage } from '../../context/LanguageContext';
-import { Edit3, CheckCircle2, Clock } from 'lucide-react';
+import { Edit3, CheckCircle2, Clock, MapPin, Building2 } from 'lucide-react';
 
 export const DepartmentTable = ({ grievances = [], onUpdateStatus }) => {
   const { t } = useLanguage();
@@ -34,11 +34,53 @@ export const DepartmentTable = ({ grievances = [], onUpdateStatus }) => {
 
   return (
     <>
-      <div className="bg-white border border-gov-border rounded-2xl shadow-sm overflow-hidden">
+      {/* Mobile View (< 768px): Stacked Cards (Zero Horizontal Overflow!) */}
+      <div className="md:hidden space-y-3">
+        {grievances.map((g) => (
+          <div key={g.ticketId} className="p-4 bg-white border border-slate-200/90 rounded-2xl shadow-2xs space-y-3 text-left">
+            <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2">
+              <span className="font-mono font-black text-sm text-stitch-navy">{g.ticketId}</span>
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${statusStyles[g.status] || 'bg-slate-100 text-slate-800'}`}>
+                • {g.status}
+              </span>
+            </div>
+
+            <div className="space-y-1 text-xs">
+              <div className="flex items-center gap-1.5 font-bold text-stitch-navy">
+                <Building2 className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                <span>{g.category}</span>
+                <span className="text-slate-400 font-normal">({g.department})</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-600">
+                <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="truncate">{g.location}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-xs">
+              <span className="text-[10px] font-mono text-slate-400">
+                {new Date(g.createdAt || Date.now()).toLocaleDateString('en-IN')}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => handleOpenModal(g)}
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-stitch-navy text-white text-xs font-bold rounded-xl hover:bg-stitch-navyLight transition-colors"
+              >
+                <Edit3 className="w-3 h-3 text-amber-400" />
+                <span>Update →</span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop / Tablet View (>= 768px): Full Table */}
+      <div className="hidden md:block bg-white border border-slate-200/90 rounded-2xl shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
-              <tr className="bg-slate-50 border-b border-gov-border text-xs font-bold text-gov-navy uppercase tracking-wider">
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-stitch-navy uppercase tracking-wider">
                 <th className="py-3.5 px-4">{t('officer.tableHeaderTicket')}</th>
                 <th className="py-3.5 px-4">{t('officer.tableHeaderCategory')}</th>
                 <th className="py-3.5 px-4">{t('officer.tableHeaderLocation')}</th>
@@ -49,17 +91,17 @@ export const DepartmentTable = ({ grievances = [], onUpdateStatus }) => {
             <tbody className="divide-y divide-slate-100 text-sm font-medium">
               {grievances.map((g) => (
                 <tr key={g.ticketId} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-gov-navy">
+                  <td className="py-3.5 px-4 font-mono font-bold text-stitch-navy">
                     {g.ticketId}
-                    <span className="block text-[11px] font-normal text-gov-subtle">
+                    <span className="block text-[11px] font-normal text-slate-400">
                       {new Date(g.createdAt || Date.now()).toLocaleDateString('en-IN')}
                     </span>
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="font-bold text-gov-navy block">{g.category}</span>
+                    <span className="font-bold text-stitch-navy block">{g.category}</span>
                     <span className="text-xs text-slate-500">{g.department}</span>
                   </td>
-                  <td className="py-3.5 px-4 text-xs text-gov-navy max-w-[200px] truncate">
+                  <td className="py-3.5 px-4 text-xs text-stitch-navy max-w-[200px] truncate">
                     {g.location}
                   </td>
                   <td className="py-3.5 px-4">
@@ -71,9 +113,9 @@ export const DepartmentTable = ({ grievances = [], onUpdateStatus }) => {
                     <button
                       type="button"
                       onClick={() => handleOpenModal(g)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gov-navy text-white text-xs font-bold rounded-lg hover:bg-gov-primary transition-colors min-h-touch"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-stitch-navy text-white text-xs font-bold rounded-xl hover:bg-stitch-navyLight transition-colors min-h-touch"
                     >
-                      <Edit3 className="w-3.5 h-3.5" />
+                      <Edit3 className="w-3.5 h-3.5 text-amber-400" />
                       <span>{t('officer.updateStatus')}</span>
                     </button>
                   </td>
@@ -89,12 +131,12 @@ export const DepartmentTable = ({ grievances = [], onUpdateStatus }) => {
         {selectedTicket && (
           <div className="space-y-4">
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-              <span className="font-bold text-gov-navy block mb-0.5">Complaint Description:</span>
+              <span className="font-bold text-stitch-navy block mb-0.5">Complaint Description:</span>
               <p className="text-slate-600 italic">"{selectedTicket.description}"</p>
             </div>
 
             <div>
-              <label className="text-xs font-bold text-gov-navy block mb-1">New Resolution Status</label>
+              <label className="text-xs font-bold text-stitch-navy block mb-1">New Resolution Status</label>
               <select
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value)}
@@ -108,7 +150,7 @@ export const DepartmentTable = ({ grievances = [], onUpdateStatus }) => {
             </div>
 
             <div>
-              <label className="text-xs font-bold text-gov-navy block mb-1">Official Resolution & Inspection Notes</label>
+              <label className="text-xs font-bold text-stitch-navy block mb-1">Official Resolution & Inspection Notes</label>
               <textarea
                 rows={3}
                 placeholder="e.g. Repair crew dispatched, leak sealed on site."

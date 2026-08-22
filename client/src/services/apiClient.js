@@ -1,77 +1,102 @@
 /**
- * Centralized API Client for SAHAYAK
+ * Centralized API Client for SAHAYAK with robust dual-origin resolution
  */
 
-const API_BASE = '/api';
+const getApiBase = () => {
+  if (typeof window !== 'undefined') {
+    const origin = window.location.origin;
+    if (origin.includes('5173')) {
+      return '/api';
+    }
+  }
+  return '/api';
+};
+
+const API_BASE = getApiBase();
+
+async function safeFetch(endpoint, options = {}) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, options);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP ${res.status}: Failed request`);
+    }
+    return await res.json();
+  } catch (primaryErr) {
+    // IPv4 fallback check for Windows Vite dev server
+    if (typeof window !== 'undefined' && window.location.port === '5173') {
+      try {
+        const fallbackRes = await fetch(`http://127.0.0.1:5000/api${endpoint}`, options);
+        if (!fallbackRes.ok) {
+          const err = await fallbackRes.json().catch(() => ({}));
+          throw new Error(err.error || `HTTP ${fallbackRes.status}: Failed request`);
+        }
+        return await fallbackRes.json();
+      } catch (fallbackErr) {
+        throw primaryErr;
+      }
+    }
+    throw primaryErr;
+  }
+}
 
 export const apiClient = {
   // Orchestrate citizen turn
   async orchestrate({ message, conversationState, language }) {
-    const res = await fetch(`${API_BASE}/ai/orchestrate`, {
+    return await safeFetch('/ai/orchestrate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message, conversationState, language })
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to process assistant request');
-    }
-    return await res.json();
   },
 
-  // Confirm pending grievance and get ticket ID
+  // Confirm pending grievance
   async confirmGrievance(pendingGrievance) {
-    const res = await fetch(`${API_BASE}/ai/confirm-grievance`, {
+    return await safeFetch('/ai/confirm-grievance', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pendingGrievance })
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to submit grievance');
-    }
-    return await res.json();
   },
 
-  // Track ticket by ID
+  // Confirm scheme application
+  async confirmApplication(pendingApplication) {
+    return await safeFetch('/ai/confirm-application', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pendingApplication })
+    });
+  },
+
+  // Track grievance ticket
   async trackTicket(ticketId) {
-    const res = await fetch(`${API_BASE}/grievances/track/${encodeURIComponent(ticketId)}`);
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Ticket not found');
-    }
-    return await res.json();
+    return await safeFetch(`/grievances/track/${encodeURIComponent(ticketId)}`);
+  },
+
+  // Track scheme application
+  async trackApplication(appId) {
+    return await safeFetch(`/applications/track/${encodeURIComponent(appId)}`);
   },
 
   // Officer Login
   async officerLogin(credentials) {
-    const res = await fetch(`${API_BASE}/officer/login`, {
+    return await safeFetch('/officer/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials)
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Login failed');
-    }
-    return await res.json();
   },
 
   // Officer Fetch Grievances
   async getOfficerGrievances(token) {
-    const res = await fetch(`${API_BASE}/officer/grievances`, {
+    return await safeFetch('/officer/grievances', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to load officer dashboard data');
-    }
-    return await res.json();
   },
 
   // Officer Update Status
   async updateGrievanceStatus(ticketId, payload, token) {
-    const res = await fetch(`${API_BASE}/officer/grievances/${ticketId}`, {
+    return await safeFetch(`/officer/grievances/${ticketId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -79,10 +104,5 @@ export const apiClient = {
       },
       body: JSON.stringify(payload)
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to update ticket status');
-    }
-    return await res.json();
   }
 };
