@@ -4,7 +4,13 @@ import { AIResponse } from './AIResponse';
 
 export const ChatMessage = ({ message }) => {
   if (message.sender === 'user') {
-    return <UserMessage content={message.text} timestamp={message.timestamp} />;
+    return (
+      <UserMessage
+        content={message.text}
+        timestamp={message.timestamp}
+        attachedImagePreview={message.attachedImagePreview}
+      />
+    );
   }
 
   return (

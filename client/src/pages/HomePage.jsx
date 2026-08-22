@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SahayakVoiceOrb } from '../components/voice/SahayakVoiceOrb';
-import { QuickActionCard } from '../components/home/QuickActionCard';
-import { Landmark, FileText, Search, Keyboard, Sparkles, MessageSquare } from 'lucide-react';
+import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import { Landmark, FileText, Search, Send, ArrowRight, Compass } from 'lucide-react';
 
-export const HomePage = () => {
-  const { t } = useLanguage();
+const HomePageContent = () => {
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [voiceState, setVoiceState] = useState('idle');
-  const [voiceError, setVoiceError] = useState(null);
+  const [textInput, setTextInput] = useState('');
 
   const handleVoiceTranscript = (text) => {
     navigate('/assistant', { state: { initialMessage: text } });
@@ -19,104 +19,202 @@ export const HomePage = () => {
     navigate('/assistant', { state: { initialMessage: promptText } });
   };
 
+  const handleTextSubmit = (e) => {
+    e.preventDefault();
+    if (textInput.trim()) {
+      navigate('/assistant', { state: { initialMessage: textInput.trim() } });
+    }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-10 animate-in fade-in duration-300">
-      {/* Hero Section */}
-      <section className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-gov-accentDark text-xs font-bold shadow-2xs">
-          <Sparkles className="w-4 h-4 text-gov-accent" />
-          <span>Sahayak Citizen Access Layer</span>
+    <div className="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8 animate-in fade-in duration-300">
+      {/* Desktop 2-Column Hero */}
+      <div className="hidden md:grid md:grid-cols-2 gap-8 items-center bg-white/80 border border-slate-200/90 rounded-3xl p-8 shadow-stitch-card">
+        {/* Left Column */}
+        <div className="space-y-4 text-left">
+          <span className="text-[11px] font-extrabold text-stitch-accent uppercase tracking-widest block">
+            CITIZEN ASSISTANT
+          </span>
+          <h1 className="text-4xl lg:text-5xl font-black text-stitch-navy tracking-tight leading-tight">
+            {t('home.desktopHeadline')}
+          </h1>
+          <p className="text-sm text-stitch-subtle leading-relaxed font-medium">
+            {t('home.desktopSubtitle')}
+          </p>
+
+          <div className="flex items-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => navigate('/assistant')}
+              className="px-6 py-3 bg-black hover:bg-slate-800 text-white font-extrabold text-xs rounded-full transition-all shadow-stitch-float flex items-center gap-2"
+            >
+              <Compass className="w-4 h-4 text-amber-400" />
+              <span>{t('home.startListening')}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/assistant', { state: { initialMessage: "Mujhe saari sarkari yojnayein dikhao" } })}
+              className="px-6 py-3 bg-white hover:bg-slate-100 text-stitch-navy border border-slate-300 font-extrabold text-xs rounded-full transition-all"
+            >
+              <span>{t('home.exploreDirectory')}</span>
+            </button>
+          </div>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-gov-navy tracking-tight leading-tight">
-          Aapko kis cheez mein madad chahiye?
-        </h1>
-        <p className="text-base sm:text-lg text-gov-subtle max-w-2xl mx-auto leading-relaxed font-medium">
-          Bas batayiye aapko kis cheez ki zarurat hai. Aap bolkar ya likhkar madad le sakte hain.
-        </p>
+        {/* Right Column: Elevated Voice Card */}
+        <div className="p-8 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card flex flex-col items-center justify-center space-y-4 text-center">
+          <span className="text-[10px] font-extrabold text-stitch-subtle uppercase tracking-wider">
+            • Awaiting input...
+          </span>
 
-        {/* Primary Action Hero Box with SahayakVoiceOrb */}
-        <div className="p-8 bg-white border border-gov-border rounded-3xl shadow-sm max-w-xl mx-auto space-y-6">
           <SahayakVoiceOrb
             state={voiceState}
             setState={setVoiceState}
             onTranscript={handleVoiceTranscript}
-            onError={(msg) => setVoiceError(msg)}
           />
 
-          {voiceError && (
-            <p className="text-xs font-semibold text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200">
-              {voiceError}
-            </p>
-          )}
+          <p className="text-xs text-slate-400 italic font-medium">
+            "{language === 'hi' ? 'मुझे योजनाओं के बारे में बताओ' : 'Find housing schemes in Mumbai'}"
+          </p>
+        </div>
+      </div>
 
-          <div className="relative flex items-center justify-center">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200"></div></div>
-            <span className="relative px-3 bg-white text-xs font-bold text-slate-400 uppercase tracking-wider">OR</span>
+      {/* Mobile Hero */}
+      <div className="md:hidden space-y-5 text-center">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-black text-stitch-navy tracking-tight">
+            {t('home.heroTitle')}
+          </h1>
+          <p className="text-xs text-stitch-subtle font-medium">
+            {t('home.heroSubtitle')}
+          </p>
+        </div>
+
+        {/* Soft Lavender Voice Orb Box */}
+        <div className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card space-y-4">
+          <SahayakVoiceOrb
+            state={voiceState}
+            setState={setVoiceState}
+            onTranscript={handleVoiceTranscript}
+          />
+
+          <form onSubmit={handleTextSubmit} className="relative">
+            <input
+              type="text"
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              placeholder={t('chat.placeholder')}
+              className="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-full text-xs font-medium focus:outline-none focus:border-stitch-accent"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-stitch-accent hover:text-stitch-navy"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Suggestion Chips */}
+      <div className="space-y-2 text-center md:text-left">
+        <span className="text-[10px] font-extrabold text-stitch-subtle uppercase tracking-wider block">
+          {t('home.suggestions')}
+        </span>
+        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+          {[
+            { label: t('home.actionSchemesTitle'), icon: Search, query: "Mere paas 2 acre zameen hai Gwalior mein, PM-KISAN ke baare mein batao" },
+            { label: t('home.actionGrievanceTitle'), icon: FileText, query: "Mere area Ward 12 mein 5 din se paani nahi aa raha" },
+            { label: t('home.actionTrackTitle'), icon: Landmark, query: "Meri complaint GRV-2026-894102 ka status kya hai?" }
+          ].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handlePromptClick(item.query)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-amber-50 border border-slate-200/90 rounded-full text-xs font-bold text-stitch-navy transition-all shadow-2xs"
+              >
+                <Icon className="w-3.5 h-3.5 text-stitch-accent" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Core Capabilities 3-Card Grid */}
+      <div className="space-y-3 text-left">
+        <div>
+          <h2 className="text-xl font-black text-stitch-navy tracking-tight">{t('home.coreCapabilities')}</h2>
+          <p className="text-xs text-stitch-subtle font-medium">{t('home.coreCapabilitiesDesc')}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div
+            onClick={() => navigate('/assistant', { state: { initialMessage: "Mere liye koi government scheme hai?" } })}
+            className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card hover:shadow-stitch-hover transition-all cursor-pointer space-y-3"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+              <Landmark className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-stitch-navy">{t('home.actionSchemesTitle')}</h3>
+              <p className="text-xs text-stitch-subtle mt-1 font-medium leading-relaxed">
+                {t('home.actionSchemesDesc')}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-xs font-bold text-stitch-accent pt-1">
+              <span>{t('home.exploreNow')}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => navigate('/assistant')}
-            className="w-full py-4 bg-slate-100 hover:bg-slate-200/80 text-gov-navy font-extrabold text-base rounded-2xl transition-colors flex items-center justify-center gap-2.5 min-h-touch"
-          >
-            <Keyboard className="w-5 h-5 text-gov-primary" />
-            <span>Type your question or complaint</span>
-          </button>
-        </div>
-      </section>
-
-      {/* Tappable Example Prompt Chips */}
-      <section className="space-y-3">
-        <h2 className="text-xs font-bold text-gov-subtle uppercase tracking-wider text-center">
-          Try asking one of these:
-        </h2>
-        <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
-          {[
-            "Mere liye koi government scheme hai?",
-            "Mere area Ward 12 mein paani nahi aa raha.",
-            "Meri complaint GRV-2026-894102 ka status kya hai?"
-          ].map((prompt, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handlePromptClick(prompt)}
-              className="px-4 py-2.5 bg-white border border-slate-200 hover:border-gov-accent hover:bg-amber-50/50 text-gov-navy text-xs sm:text-sm font-semibold rounded-2xl shadow-2xs transition-all text-left min-h-touch"
-            >
-              💬 "{prompt}"
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Secondary Supporting Actions */}
-      <section className="space-y-4 pt-4">
-        <h2 className="text-base font-bold text-gov-navy">
-          Supporting Citizen Services
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <QuickActionCard
-            title={t('home.actionSchemesTitle')}
-            description={t('home.actionSchemesDesc')}
-            icon={Landmark}
-            onClick={() => navigate('/assistant', { state: { initialMessage: "Mere liye koi government scheme hai?" } })}
-            badge="Scheme Assistant"
-          />
-          <QuickActionCard
-            title={t('home.actionGrievanceTitle')}
-            description={t('home.actionGrievanceDesc')}
-            icon={FileText}
+          <div
             onClick={() => navigate('/assistant', { state: { initialMessage: "Mujhe complaint register karni hai" } })}
-            badge="Grievance Assistant"
-          />
-          <QuickActionCard
-            title={t('home.actionTrackTitle')}
-            description={t('home.actionTrackDesc')}
-            icon={Search}
+            className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card hover:shadow-stitch-hover transition-all cursor-pointer space-y-3"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-red-50 border border-red-100 text-red-700 flex items-center justify-center font-bold">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-stitch-navy">{t('home.actionGrievanceTitle')}</h3>
+              <p className="text-xs text-stitch-subtle mt-1 font-medium leading-relaxed">
+                {t('home.actionGrievanceDesc')}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-xs font-bold text-stitch-accent pt-1">
+              <span>{t('home.startProcess')}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </div>
+
+          <div
             onClick={() => navigate('/track')}
-          />
+            className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card hover:shadow-stitch-hover transition-all cursor-pointer space-y-3"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+              <Search className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-stitch-navy">{t('home.actionTrackTitle')}</h3>
+              <p className="text-xs text-stitch-subtle mt-1 font-medium leading-relaxed">
+                {t('home.actionTrackDesc')}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-xs font-bold text-stitch-accent pt-1">
+              <span>{t('home.checkStatus')}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
+
+export const HomePage = () => (
+  <ErrorBoundary>
+    <HomePageContent />
+  </ErrorBoundary>
+);
