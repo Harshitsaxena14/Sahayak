@@ -18,6 +18,26 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Root Information Endpoint
+app.get('/', (req, res) => {
+  res.json({
+    service: 'SAHAYAK AI Government & Citizen Assistant API',
+    status: 'online',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      orchestrate: 'POST /api/ai/orchestrate',
+      confirmGrievance: 'POST /api/ai/confirm-grievance',
+      schemes: '/api/schemes',
+      grievances: '/api/grievances',
+      trackGrievance: '/api/grievances/track/:ticketId',
+      officerLogin: 'POST /api/officer/login',
+      officerGrievances: '/api/officer/grievances'
+    },
+    documentation: 'SIH 2026 Prototype API'
+  });
+});
+
 // Routes
 app.use('/api/ai', aiRoutes);
 app.use('/api/schemes', schemeRoutes);
@@ -34,9 +54,20 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Initialize server and seed memory store if mongo is offline
-app.listen(PORT, async () => {
-  console.log(`🚀 Sahayak API Server running on port ${PORT}`);
+// 404 Route Handler for Unrecognized Endpoints
+app.use((req, res) => {
+  res.status(404).json({ error: 'Endpoint not found', path: req.originalUrl });
+});
+
+// Global Centralized Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(' Centralized Server Error:', err);
+  res.status(500).json({ error: 'Internal Server Error', details: err.message });
+});
+
+// Bind to 0.0.0.0 to support both IPv4 and IPv6 localhost resolutions
+app.listen(PORT, '0.0.0.0', async () => {
+  console.log(`🚀 Sahayak API Server running on http://127.0.0.1:${PORT}`);
   await connectDB();
   
   if (!getIsConnected()) {
