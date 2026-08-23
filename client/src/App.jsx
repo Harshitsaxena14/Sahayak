@@ -7,18 +7,20 @@ import { HomePage } from './pages/HomePage';
 import { ConversationPage } from './pages/ConversationPage';
 import { TrackingPage } from './pages/TrackingPage';
 import { OfficerPage } from './pages/OfficerPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 export function App() {
   return (
     <LanguageProvider>
       <Router>
-        <div className="min-h-screen flex flex-col bg-stitch-bg text-stitch-navy selection:bg-amber-100 selection:text-amber-900 pb-20 md:pb-4 overflow-x-hidden">
+        <div className="min-h-screen flex flex-col bg-sahayak-canvas text-sahayak-ink selection:bg-amber-100 selection:text-amber-900 pb-20 md:pb-4 overflow-x-hidden">
           <Navbar />
           <main className="flex-1 overflow-x-hidden">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/assistant" element={<ConversationPage />} />
               <Route path="/track" element={<TrackingPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/officer" element={<OfficerPage />} />
               {/* Legacy / Alias Route Redirects */}
               <Route path="/schemes" element={<Navigate to="/assistant" replace />} />

@@ -2,7 +2,7 @@
   "name": "sahayak-sih2026",
   "version": "1.0.0",
   "description": "SAHAYAK — Multilingual Voice-First AI Government & Citizen Assistant (SIH 2026)",
-  "main": "server/src/server.js",
+  "main": "server/server.js",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "dev:server": "npm run dev --prefix server",

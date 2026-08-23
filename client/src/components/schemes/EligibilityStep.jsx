@@ -3,17 +3,17 @@ import { CheckCircle, AlertCircle, HelpCircle } from 'lucide-react';
 
 export const EligibilityStep = ({ label, value, status = 'checked' }) => {
   const icons = {
-    checked: <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />,
-    warning: <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />,
-    pending: <HelpCircle className="w-5 h-5 text-slate-400 shrink-0" />
+    checked: <CheckCircle className="w-4 h-4 text-sahayak-success shrink-0" />,
+    warning: <AlertCircle className="w-4 h-4 text-sahayak-warning shrink-0" />,
+    pending: <HelpCircle className="w-4 h-4 text-sahayak-inkMuted shrink-0" />
   };
 
   return (
-    <div className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+    <div className="flex items-start gap-2.5 p-2.5 bg-sahayak-canvas border border-sahayak-border rounded-xl">
       {icons[status] || icons.checked}
       <div>
-        <span className="text-xs font-bold text-gov-subtle block uppercase tracking-wider">{label}</span>
-        <span className="text-sm font-semibold text-gov-navy">{value}</span>
+        <span className="text-[10px] font-extrabold text-sahayak-inkMuted block uppercase tracking-wider">{label}</span>
+        <span className="text-xs font-semibold text-sahayak-ink">{value}</span>
       </div>
     </div>
   );

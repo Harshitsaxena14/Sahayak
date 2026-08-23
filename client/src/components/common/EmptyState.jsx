@@ -1,29 +1,23 @@
 import React from 'react';
-import { SearchX, RefreshCw } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
-export const EmptyState = ({
-  title = "No records found",
-  message = "We couldn't find any information matching your search. Please check the details and try again.",
-  onAction,
-  actionLabel = "Try Again"
-}) => {
+export const EmptyState = ({ title, message, onAction, actionLabel }) => {
   return (
-    <div className="p-8 bg-white border border-slate-200/90 rounded-3xl shadow-civic text-center space-y-4 max-w-md mx-auto my-6 animate-in fade-in duration-200">
-      <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200/80 flex items-center justify-center mx-auto">
-        <SearchX className="w-6 h-6" />
+    <div className="p-8 bg-sahayak-surface border border-sahayak-border rounded-2xl sm:rounded-3xl shadow-sahayak-card text-center space-y-3 max-w-md mx-auto my-6 animate-in fade-in duration-200">
+      <div className="w-12 h-12 rounded-2xl bg-sahayak-surfaceWarm text-sahayak-primary flex items-center justify-center font-bold text-xl mx-auto shadow-xs">
+        <AlertCircle className="w-6 h-6" />
       </div>
       <div>
-        <h3 className="text-base font-extrabold text-gov-navy">{title}</h3>
-        <p className="text-xs text-gov-subtle mt-1 leading-relaxed">{message}</p>
+        <h3 className="text-base font-extrabold text-sahayak-ink">{title}</h3>
+        <p className="text-xs text-sahayak-inkSoft mt-1 leading-relaxed">{message}</p>
       </div>
       {onAction && (
         <button
           type="button"
           onClick={onAction}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-gov-navy hover:bg-gov-navyLight text-white text-xs font-bold rounded-xl transition-all shadow-2xs min-h-touch"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-sahayak-primary hover:bg-sahayak-primaryHover text-white text-xs font-bold rounded-full transition-all shadow-sahayak-float min-h-touch active:scale-97"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>{actionLabel}</span>
+          <span>{actionLabel || 'Retry'}</span>
         </button>
       )}
     </div>

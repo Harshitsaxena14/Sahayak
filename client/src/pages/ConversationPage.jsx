@@ -14,7 +14,7 @@ import { AIStateTracker } from '../components/chat/AIStateTracker';
 import { ContextChip } from '../components/common/ContextChip';
 import { StepProgressBar } from '../components/common/StepProgressBar';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
-import { Send, Info, XCircle, PlayCircle, Camera, Mic, ArrowRight, Image as ImageIcon, Trash2, RefreshCw } from 'lucide-react';
+import { Send, Info, XCircle, PlayCircle, Camera, ArrowRight, Trash2, RefreshCw } from 'lucide-react';
 
 const ConversationPageContent = () => {
   const { language, t } = useLanguage();
@@ -42,7 +42,7 @@ const ConversationPageContent = () => {
     scrollToBottom();
   }, [messages, isLoading, aiStage, attachedImage]);
 
-  // Safe Session Storage Initialization (Fix Phase 1 White Screen)
+  // Safe Session Storage Initialization
   useEffect(() => {
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
@@ -90,7 +90,6 @@ const ConversationPageContent = () => {
     }
   }, [messages, conversationState]);
 
-  // Camera / File Input Change Handler (Phase 4)
   const handleImageCapture = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -175,7 +174,7 @@ const ConversationPageContent = () => {
         );
       } else if (response.uiType === 'COMPLAINT_PREVIEW' && response.complaintPreview) {
         const previewWithPhoto = attachedImage
-          ? { ...response.complaintPreview, photoAttachment: attachedImage.name }
+          ? { ...response.complaintPreview, attachedImagePreview: attachedImage.previewUrl, photoAttachment: attachedImage.name }
           : response.complaintPreview;
 
         responseChildren = (
@@ -198,7 +197,6 @@ const ConversationPageContent = () => {
       };
 
       setMessages((prev) => [...prev, aiMsg]);
-      // Clear image attachment after successful message send
       setAttachedImage(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (err) {
@@ -295,22 +293,22 @@ const ConversationPageContent = () => {
   const collectedEntries = Object.entries(collectedData);
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 flex flex-col h-[calc(100vh-140px)] md:h-[calc(100vh-80px)]">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 flex flex-col h-[calc(100dvh-135px)] md:h-[calc(100dvh-85px)]">
       {/* Title Header & Step Progress Bar */}
       {(isApplicationActive || isGrievanceActive) && (
-        <div className="mb-3 space-y-2 text-center">
-          <h2 className="text-lg sm:text-xl font-black text-stitch-navy">
+        <div className="mb-2 space-y-1 text-center">
+          <h2 className="text-base sm:text-lg font-black text-sahayak-ink">
             {isApplicationActive
-              ? (language === 'hi' ? "सहायक से आवेदन: PM-KISAN" : "Applying with Sahayak: PM-KISAN")
+              ? (language === 'hi' ? `सहायक से आवेदन: ${conversationState.schemeName || 'PM-KISAN'}` : `Applying with Sahayak: ${conversationState.schemeName || 'PM-KISAN'}`)
               : (language === 'hi' ? "सहायक से शिकायत दर्ज करें" : "Applying with Sahayak: Grievance")}
           </h2>
           {isApplicationActive && <StepProgressBar currentStep={6 - (conversationState.missingFields?.length || 4)} totalSteps={6} />}
         </div>
       )}
 
-      {/* Extracted Context Chips Top Bar */}
+      {/* Context Chips Top Bar */}
       {collectedEntries.length > 0 && (
-        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-3 px-2 py-1.5 bg-white/70 rounded-full border border-slate-200/60 shadow-2xs">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-2 px-2 py-1 bg-sahayak-surfaceWarm/80 rounded-full border border-sahayak-border shadow-xs">
           {collectedEntries.map(([key, val]) => (
             <ContextChip key={key} label={key} value={String(val)} isChecked={true} />
           ))}
@@ -318,9 +316,9 @@ const ConversationPageContent = () => {
       )}
 
       {/* Banner for Active Exit / Resume */}
-      <div className="bg-amber-50 border border-amber-200/80 text-amber-900 text-xs px-3.5 py-1.5 rounded-xl mb-3 flex items-center justify-between gap-2 shadow-2xs">
+      <div className="bg-sahayak-surfaceWarm border border-sahayak-border text-sahayak-ink text-xs px-3.5 py-1.5 rounded-xl mb-2 flex items-center justify-between gap-2 shadow-xs">
         <div className="flex items-center gap-2">
-          <Info className="w-4 h-4 text-amber-700 shrink-0" />
+          <Info className="w-4 h-4 text-sahayak-primary shrink-0" />
           <span className="font-semibold text-[11px] sm:text-xs">
             {isApplicationActive
               ? t('chat.activeWorkflow')
@@ -336,7 +334,7 @@ const ConversationPageContent = () => {
           <button
             type="button"
             onClick={handleCancelApplication}
-            className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 bg-red-100 hover:bg-red-200 px-2.5 py-1 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1 text-[11px] font-bold text-sahayak-error bg-sahayak-errorBg hover:bg-red-100 px-2.5 py-1 rounded-lg transition-colors min-h-touch"
           >
             <XCircle className="w-3.5 h-3.5" />
             <span>{t('chat.cancelWorkflow')}</span>
@@ -345,7 +343,7 @@ const ConversationPageContent = () => {
           <button
             type="button"
             onClick={handleResumeApplication}
-            className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg transition-colors"
+            className="inline-flex items-center gap-1 text-[11px] font-bold text-sahayak-success bg-sahayak-successBg hover:bg-emerald-100 px-2.5 py-1 rounded-lg transition-colors min-h-touch"
           >
             <PlayCircle className="w-3.5 h-3.5" />
             <span>{t('chat.resumeWorkflow')}</span>
@@ -366,12 +364,12 @@ const ConversationPageContent = () => {
         )}
 
         {apiError && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-700 flex items-center justify-between gap-2">
+          <div className="p-3 bg-sahayak-errorBg border border-red-200 rounded-2xl text-xs text-sahayak-error flex items-center justify-between gap-2">
             <span>{apiError}</span>
             <button
               type="button"
               onClick={() => handleSend(inputMessage)}
-              className="px-3 py-1 bg-red-600 text-white rounded-lg font-bold text-[11px] flex items-center gap-1"
+              className="px-3 py-1 bg-sahayak-error text-white rounded-lg font-bold text-[11px] flex items-center gap-1 min-h-touch"
             >
               <RefreshCw className="w-3 h-3" />
               <span>Retry</span>
@@ -382,20 +380,20 @@ const ConversationPageContent = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Attached Photo Thumbnail Card (Phase 4 Camera Attachment) */}
+      {/* Attached Photo Thumbnail Card */}
       {attachedImage && (
-        <div className="my-2 p-2 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between gap-2 animate-in fade-in">
+        <div className="my-1.5 p-2 bg-sahayak-surfaceWarm border border-sahayak-border rounded-2xl flex items-center justify-between gap-2 animate-in fade-in">
           <div className="flex items-center gap-2">
             <img src={attachedImage.previewUrl} alt="Captured preview" className="w-10 h-10 object-cover rounded-xl border border-amber-300" />
             <div className="text-left">
-              <span className="text-[10px] font-extrabold text-amber-900 uppercase block">{t('chat.photoAttached')}</span>
-              <span className="text-xs font-semibold text-slate-700 truncate max-w-[180px] sm:max-w-xs block">{attachedImage.name}</span>
+              <span className="text-[10px] font-extrabold text-sahayak-primary uppercase block">{t('chat.photoAttached')}</span>
+              <span className="text-xs font-semibold text-sahayak-ink truncate max-w-[180px] sm:max-w-xs block">{attachedImage.name}</span>
             </div>
           </div>
           <button
             type="button"
             onClick={handleRemoveImage}
-            className="p-1.5 text-red-600 hover:bg-red-100 rounded-xl transition-colors"
+            className="p-1.5 text-sahayak-error hover:bg-sahayak-errorBg rounded-xl transition-colors min-h-touch min-w-touch flex items-center justify-center"
             title={t('chat.removePhoto')}
           >
             <Trash2 className="w-4 h-4" />
@@ -403,7 +401,7 @@ const ConversationPageContent = () => {
         </div>
       )}
 
-      {/* Hidden Mobile/Desktop Camera Input (Phase 4) */}
+      {/* Hidden File Input */}
       <input
         type="file"
         ref={fileInputRef}
@@ -413,14 +411,14 @@ const ConversationPageContent = () => {
         className="hidden"
       />
 
-      {/* Input Container Box */}
-      <div className="mt-2 pt-2 border-t border-slate-200/80">
+      {/* Sticky Bottom Input Composer */}
+      <div className="mt-1 pt-1.5 border-t border-sahayak-border pb-[env(safe-area-inset-bottom)]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
-          className="p-3 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card space-y-2"
+          className="p-2.5 bg-sahayak-surface border border-sahayak-border rounded-2xl sm:rounded-3xl shadow-sahayak-card space-y-2"
         >
           <textarea
             rows={2}
@@ -436,20 +434,19 @@ const ConversationPageContent = () => {
               isApplicationActive
                 ? (language === 'hi' ? "अनुरोधित विवरण दर्ज करें..." : "Provide requested details...")
                 : isGrievanceActive
-                ? (language === 'hi' ? "समस्या का विवरण लिखें..." : "Describe the issue here... (e.g., 'There has been no water supply for 3 days...')")
+                ? (language === 'hi' ? "समस्या का विवरण लिखें..." : "Describe the issue here...")
                 : t('chat.placeholder')
             }
-            className="w-full px-3 py-1.5 bg-transparent text-sm font-medium text-stitch-navy focus:outline-none placeholder:text-slate-400 resize-none"
+            className="w-full px-3 py-1 bg-transparent text-xs sm:text-sm font-medium text-sahayak-ink focus:outline-none placeholder:text-sahayak-inkMuted resize-none"
           />
 
-          <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
-            <div className="flex items-center gap-1">
-              {/* Functional Camera Capture Button */}
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-sahayak-border/60">
+            <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className={`p-2 rounded-full transition-colors ${
-                  attachedImage ? 'text-amber-600 bg-amber-100' : 'text-slate-400 hover:text-stitch-navy hover:bg-slate-100'
+                className={`p-2 rounded-full transition-colors min-h-touch min-w-touch flex items-center justify-center ${
+                  attachedImage ? 'text-sahayak-primary bg-sahayak-surfaceWarm' : 'text-sahayak-inkMuted hover:text-sahayak-ink hover:bg-sahayak-canvas'
                 }`}
                 title={t('chat.attachPhoto')}
               >
@@ -460,13 +457,14 @@ const ConversationPageContent = () => {
                 state={voiceState}
                 setState={setVoiceState}
                 onTranscript={(text) => handleSend(text)}
+                size="normal"
               />
             </div>
 
             <button
               type="submit"
               disabled={(!inputMessage.trim() && !attachedImage) || isLoading}
-              className="px-5 py-2.5 bg-black hover:bg-slate-800 disabled:opacity-50 text-white font-extrabold text-xs rounded-full transition-all flex items-center gap-1.5 min-h-touch shadow-2xs"
+              className="px-5 py-2.5 bg-sahayak-primary hover:bg-sahayak-primaryHover disabled:opacity-40 text-white font-extrabold text-xs rounded-full transition-all flex items-center gap-1.5 min-h-touch shadow-sahayak-float active:scale-97"
             >
               <span>{t('chat.process')}</span>
               <ArrowRight className="w-3.5 h-3.5" />

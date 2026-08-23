@@ -10,7 +10,14 @@ const translations = {
 };
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('hi'); // Default to Hindi for inclusive experience
+  const [language, setLanguage] = useState(() => {
+    try {
+      const saved = localStorage.getItem('sahayak_lang');
+      return saved && (saved === 'hi' || saved === 'en') ? saved : 'hi';
+    } catch (e) {
+      return 'hi';
+    }
+  });
 
   const t = (keyPath) => {
     const keys = keyPath.split('.');
@@ -35,6 +42,9 @@ export const LanguageProvider = ({ children }) => {
   const switchLanguage = (lang) => {
     if (translations[lang]) {
       setLanguage(lang);
+      try {
+        localStorage.setItem('sahayak_lang', lang);
+      } catch (e) {}
     }
   };
 

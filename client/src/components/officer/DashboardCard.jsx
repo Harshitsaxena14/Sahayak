@@ -2,28 +2,30 @@ import React from 'react';
 
 export const DashboardCard = ({ title, count, icon: Icon, color = 'blue' }) => {
   const colorMap = {
-    blue: 'bg-white border-slate-200/90 text-gov-navy shadow-civic',
-    amber: 'bg-white border-amber-200/90 text-gov-navy shadow-civic',
-    emerald: 'bg-white border-emerald-200/90 text-gov-navy shadow-civic',
-    red: 'bg-white border-red-200/90 text-gov-navy shadow-civic'
+    blue: 'bg-sahayak-surface border-sahayak-border text-sahayak-ink shadow-sahayak-card',
+    amber: 'bg-sahayak-surface border-amber-200 text-sahayak-ink shadow-sahayak-card',
+    emerald: 'bg-sahayak-surface border-emerald-200 text-sahayak-ink shadow-sahayak-card',
+    red: 'bg-sahayak-surface border-red-200 text-sahayak-ink shadow-sahayak-card'
   };
 
   const iconBgMap = {
-    blue: 'bg-blue-50 text-blue-700 border-blue-200',
-    amber: 'bg-amber-50 text-amber-700 border-amber-200',
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    red: 'bg-red-50 text-red-700 border-red-200'
+    blue: 'bg-sahayak-surfaceWarm text-sahayak-primary',
+    amber: 'bg-sahayak-warningBg text-sahayak-warning',
+    emerald: 'bg-sahayak-successBg text-sahayak-success',
+    red: 'bg-sahayak-errorBg text-sahayak-error'
   };
 
   return (
-    <div className={`p-5 rounded-3xl border ${colorMap[color] || colorMap.blue} flex items-center justify-between transition-all hover:shadow-civic-hover`}>
+    <div className={`p-5 rounded-2xl sm:rounded-3xl border transition-all flex items-center justify-between ${colorMap[color] || colorMap.blue}`}>
       <div>
-        <span className="text-[10px] font-extrabold uppercase tracking-wider block text-gov-subtle mb-1">{title}</span>
-        <span className="text-3xl font-extrabold text-gov-navy">{count}</span>
+        <span className="text-[10px] font-extrabold uppercase tracking-wider block text-sahayak-inkMuted mb-1">{title}</span>
+        <span className="text-2xl sm:text-3xl font-extrabold text-sahayak-ink">{count}</span>
       </div>
-      <div className={`p-3 rounded-2xl border ${iconBgMap[color] || iconBgMap.blue} shadow-2xs`}>
-        <Icon className="w-5 h-5" />
-      </div>
+      {Icon && (
+        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold shrink-0 ${iconBgMap[color] || iconBgMap.blue}`}>
+          <Icon className="w-5 h-5" />
+        </div>
+      )}
     </div>
   );
 };

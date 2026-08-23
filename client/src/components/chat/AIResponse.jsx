@@ -4,7 +4,7 @@ import { voiceService } from '../../services/voiceService';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const AIResponse = ({ content, children, timestamp }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const handleToggleSpeak = () => {
@@ -23,36 +23,36 @@ export const AIResponse = ({ content, children, timestamp }) => {
 
   return (
     <div className="flex items-start gap-3 my-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
-      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gov-navy to-slate-800 text-amber-400 flex items-center justify-center font-bold text-lg shrink-0 shadow-2xs mt-1 border border-slate-700/50">
+      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-sahayak-intelligence text-white flex items-center justify-center font-bold text-base sm:text-lg shrink-0 shadow-xs mt-1 border border-purple-300/40">
         🏛️
       </div>
-      <div className="flex-1 max-w-2xl bg-white border border-slate-200/90 rounded-2xl rounded-tl-xs p-4.5 shadow-civic">
-        <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
-          <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-gov-navy uppercase tracking-wider">
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+      <div className="flex-1 max-w-2xl bg-sahayak-surfaceWarm border border-sahayak-border/80 rounded-2xl rounded-tl-xs p-4 shadow-xs">
+        <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-sahayak-border/60">
+          <div className="flex items-center gap-1.5 text-[11px] font-extrabold text-sahayak-ink uppercase tracking-wider">
+            <ShieldCheck className="w-3.5 h-3.5 text-sahayak-primary" />
             <span>SAHAYAK AI Assistant</span>
           </div>
           <button
             type="button"
             onClick={handleToggleSpeak}
             className={`p-1.5 rounded-lg transition-colors min-h-touch min-w-touch flex items-center justify-center ${
-              isSpeaking ? 'bg-amber-100 text-amber-800' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
+              isSpeaking ? 'bg-sahayak-warningBg text-sahayak-warning' : 'text-sahayak-inkMuted hover:text-sahayak-ink hover:bg-sahayak-surface'
             }`}
-            aria-label={isSpeaking ? 'Stop text to speech' : 'Listen to AI response'}
+            aria-label={isSpeaking ? 'Stop speech' : 'Listen to AI response'}
             title="Read out response"
           >
             {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
         </div>
 
-        <p className="text-sm sm:text-base text-gov-navy leading-relaxed font-normal whitespace-pre-wrap">
+        <p className="text-sm sm:text-base text-sahayak-ink leading-relaxed font-normal whitespace-pre-wrap">
           {content}
         </p>
 
-        {children && <div className="mt-4 space-y-3">{children}</div>}
+        {children && <div className="mt-3.5 space-y-3">{children}</div>}
 
         {timestamp && (
-          <span className="block text-right text-[10px] text-gov-subtle font-mono mt-2 opacity-80">
+          <span className="block text-right text-[10px] text-sahayak-inkMuted font-mono mt-2 opacity-80">
             {timestamp}
           </span>
         )}

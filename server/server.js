@@ -7,6 +7,9 @@ dotenv.config();
 
 const schemeRoutes = require('./routes/schemes');
 const grievanceRoutes = require('./routes/grievances');
+const aiRoutes = require('./routes/ai');
+const applicationRoutes = require('./routes/applications');
+const officerRoutes = require('./routes/officer');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +19,9 @@ app.use(express.json());
 
 app.use('/api/schemes', schemeRoutes);
 app.use('/api/grievances', grievanceRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/applications', applicationRoutes);
+app.use('/api/officer', officerRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({

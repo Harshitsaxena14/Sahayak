@@ -12,34 +12,34 @@ export class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error("Sahayak Component Boundary Error Caught:", error, errorInfo);
+    console.error("Sahayak Boundary Caught Error:", error, errorInfo);
   }
+
+  handleReload = () => {
+    this.setState({ hasError: false, error: null });
+    window.location.reload();
+  };
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="max-w-md mx-auto my-12 p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card text-center space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto">
+        <div className="max-w-md mx-auto my-12 p-6 bg-sahayak-surface border border-sahayak-border rounded-3xl shadow-sahayak-card text-center space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-sahayak-errorBg text-sahayak-error flex items-center justify-center font-bold text-xl mx-auto">
             <AlertTriangle className="w-6 h-6" />
           </div>
-          <h2 className="text-xl font-black text-stitch-navy">
-            {this.props.language === 'hi' ? 'कुछ गलत हो गया' : 'Something went wrong'}
-          </h2>
-          <p className="text-xs text-stitch-subtle font-medium">
-            {this.props.language === 'hi'
-              ? 'कृपया फिर से कोशिश करें या पृष्ठ को रीलोड करें।'
-              : 'Please try again or refresh the page.'}
-          </p>
+          <div>
+            <h2 className="text-xl font-black text-sahayak-ink">Something went wrong</h2>
+            <p className="text-xs text-sahayak-inkSoft font-medium mt-1">
+              An unhandled error occurred in this view. Don't worry, your session data is saved.
+            </p>
+          </div>
           <button
             type="button"
-            onClick={() => {
-              this.setState({ hasError: false, error: null });
-              window.location.reload();
-            }}
-            className="px-6 py-2.5 bg-stitch-navy hover:bg-stitch-navyLight text-white font-extrabold text-xs rounded-full transition-all inline-flex items-center gap-1.5 min-h-touch"
+            onClick={this.handleReload}
+            className="px-6 py-2.5 bg-sahayak-primary hover:bg-sahayak-primaryHover text-white font-extrabold text-xs rounded-full transition-all inline-flex items-center gap-1.5 min-h-touch active:scale-97"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>{this.props.language === 'hi' ? 'पुनः प्रयास करें (Retry)' : 'Retry'}</span>
+            <span>Reload Application</span>
           </button>
         </div>
       );

@@ -308,6 +308,33 @@
   ],
   "grievances": [
     {
+      "ticketId": "GRV-2026-767771",
+      "category": "Water Supply",
+      "department": "Municipal Services",
+      "location": "Ward 12, Gwalior",
+      "duration": "Recent",
+      "description": "Test water supply grievance",
+      "citizenPhone": "+91 98765 00000",
+      "status": "In Progress",
+      "priority": "Medium",
+      "assignedOfficer": "Unassigned",
+      "history": [
+        {
+          "status": "Registered",
+          "updatedAt": "2026-08-23T09:49:49.631Z",
+          "notes": "Complaint registered via Sahayak AI Assistant",
+          "updatedBy": "System"
+        },
+        {
+          "status": "In Progress",
+          "updatedAt": "2026-08-23T09:49:49.656Z",
+          "notes": "Inspection team dispatched",
+          "updatedBy": "Nodal Officer"
+        }
+      ],
+      "resolutionNotes": "Inspection team dispatched"
+    },
+    {
       "ticketId": "GRV-2026-894102",
       "category": "Water Supply",
       "department": "Municipal Jal Board",
@@ -426,6 +453,28 @@
         }
       ],
       "resolutionNotes": ""
+    }
+  ],
+  "applications": [
+    {
+      "applicationId": "APP-2026-546332",
+      "schemeId": "SCH-001",
+      "schemeName": "PM Kisan Samman Nidhi (PM-KISAN)",
+      "applicantName": "Charchit Saxena",
+      "details": {
+        "schemeId": "SCH-001",
+        "schemeName": "PM Kisan Samman Nidhi (PM-KISAN)",
+        "applicantName": "Charchit Saxena"
+      },
+      "status": "Submitted",
+      "history": [
+        {
+          "status": "Submitted",
+          "updatedAt": "2026-08-23T09:49:49.635Z",
+          "notes": "Scheme application submitted directly via Sahayak",
+          "updatedBy": "Citizen"
+        }
+      ]
     }
   ]
 }

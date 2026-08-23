@@ -1,22 +1,16 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 
-export const ContextChip = ({ label, value, isChecked = true, onClick }) => {
-  const text = value ? `${label}: ${value}` : label;
-
+export const ContextChip = ({ label, value, isChecked = true }) => {
   return (
-    <div
-      onClick={onClick}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-2xs border ${
-        onClick ? 'cursor-pointer hover:bg-slate-200' : ''
-      } bg-stitch-chip text-stitch-text border-slate-200/90`}
-    >
-      {isChecked && (
-        <span className="w-4 h-4 rounded-full bg-slate-800 text-white flex items-center justify-center shrink-0 text-[10px]">
-          <Check className="w-2.5 h-2.5 stroke-[3]" />
-        </span>
-      )}
-      <span className="truncate">{text}</span>
+    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
+      isChecked
+        ? 'bg-sahayak-surfaceWarm text-sahayak-ink border-sahayak-border shadow-xs'
+        : 'bg-sahayak-canvas text-sahayak-inkMuted border-sahayak-border'
+    }`}>
+      {isChecked && <Check className="w-3.5 h-3.5 text-sahayak-primary shrink-0" />}
+      <span className="capitalize text-sahayak-inkMuted text-[11px] font-extrabold">{label}:</span>
+      <span className="font-bold">{value}</span>
     </div>
   );
 };

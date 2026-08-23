@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SahayakVoiceOrb } from '../components/voice/SahayakVoiceOrb';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
-import { Landmark, FileText, Search, Send, ArrowRight, Compass } from 'lucide-react';
+import { Send, ArrowRight, Sparkles, MessageSquare, Compass, ShieldCheck } from 'lucide-react';
 
 const HomePageContent = () => {
   const { t, language } = useLanguage();
@@ -26,186 +26,149 @@ const HomePageContent = () => {
     }
   };
 
+  const suggestionChips = [
+    {
+      label: language === 'hi' ? "PM-KISAN ₹6,000 योजना की जानकारी" : "PM-KISAN ₹6,000 scheme info",
+      query: language === 'hi' ? "मुझे PM-KISAN योजना के बारे में बताओ" : "Tell me about PM-KISAN scheme"
+    },
+    {
+      label: language === 'hi' ? "पानी नहीं आ रहा शिकायत दर्ज करें" : "No water supply complaint",
+      query: language === 'hi' ? "मेरे वार्ड में 3 दिन से पानी नहीं आ रहा है" : "There has been no water supply for 3 days in my ward"
+    },
+    {
+      label: language === 'hi' ? "आयुष्मान भारत गोल्डन कार्ड पात्रता" : "Ayushman Bharat Golden Card eligibility",
+      query: language === 'hi' ? "आयुष्मान भारत गोल्डन कार्ड की पात्रता क्या है?" : "What is the eligibility for Ayushman Bharat Golden Card?"
+    },
+    {
+      label: language === 'hi' ? "शिकायत की स्थिति जांचें" : "Track complaint status",
+      query: language === 'hi' ? "मेरी शिकायत GRV-2026-894102 का स्टेटस बताओ" : "Check status of complaint GRV-2026-894102"
+    }
+  ];
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8 animate-in fade-in duration-300">
-      {/* Desktop 2-Column Hero */}
-      <div className="hidden md:grid md:grid-cols-2 gap-8 items-center bg-white/80 border border-slate-200/90 rounded-3xl p-8 shadow-stitch-card">
-        {/* Left Column */}
-        <div className="space-y-4 text-left">
-          <span className="text-[11px] font-extrabold text-stitch-accent uppercase tracking-widest block">
-            CITIZEN ASSISTANT
-          </span>
-          <h1 className="text-4xl lg:text-5xl font-black text-stitch-navy tracking-tight leading-tight">
-            {t('home.desktopHeadline')}
-          </h1>
-          <p className="text-sm text-stitch-subtle leading-relaxed font-medium">
-            {t('home.desktopSubtitle')}
-          </p>
-
-          <div className="flex items-center gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => navigate('/assistant')}
-              className="px-6 py-3 bg-black hover:bg-slate-800 text-white font-extrabold text-xs rounded-full transition-all shadow-stitch-float flex items-center gap-2"
-            >
-              <Compass className="w-4 h-4 text-amber-400" />
-              <span>{t('home.startListening')}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/assistant', { state: { initialMessage: "Mujhe saari sarkari yojnayein dikhao" } })}
-              className="px-6 py-3 bg-white hover:bg-slate-100 text-stitch-navy border border-slate-300 font-extrabold text-xs rounded-full transition-all"
-            >
-              <span>{t('home.exploreDirectory')}</span>
-            </button>
-          </div>
+    <div className="max-w-5xl mx-auto px-4 py-6 md:py-10 space-y-8 animate-in fade-in duration-300">
+      {/* Central Hero Assistant Card Surface */}
+      <div className="bg-sahayak-surface border border-sahayak-border rounded-3xl p-6 md:p-10 shadow-sahayak-card text-center space-y-6">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-sahayak-surfaceWarm border border-sahayak-border rounded-full text-sahayak-primary text-xs font-bold uppercase tracking-wider">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>SAHAYAK AI CITIZEN ASSISTANT</span>
         </div>
 
-        {/* Right Column: Elevated Voice Card */}
-        <div className="p-8 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card flex flex-col items-center justify-center space-y-4 text-center">
-          <span className="text-[10px] font-extrabold text-stitch-subtle uppercase tracking-wider">
-            • Awaiting input...
-          </span>
+        <div className="max-w-2xl mx-auto space-y-2">
+          <h1 className="text-3xl md:text-5xl font-black text-sahayak-ink tracking-tight leading-tight">
+            {t('home.heroTitle') || 'Government Services at Your Voice'}
+          </h1>
+          <p className="text-xs md:text-sm text-sahayak-inkSoft font-medium leading-relaxed max-w-xl mx-auto">
+            {t('home.heroSubtitle') || 'Ask questions about schemes, apply directly inside Sahayak, or register civil grievances in your natural language.'}
+          </p>
+        </div>
 
+        {/* Hero Voice Orb Surface */}
+        <div className="py-4 flex flex-col items-center justify-center">
           <SahayakVoiceOrb
             state={voiceState}
             setState={setVoiceState}
             onTranscript={handleVoiceTranscript}
+            size="hero"
           />
-
-          <p className="text-xs text-slate-400 italic font-medium">
-            "{language === 'hi' ? 'मुझे योजनाओं के बारे में बताओ' : 'Find housing schemes in Mumbai'}"
-          </p>
-        </div>
-      </div>
-
-      {/* Mobile Hero */}
-      <div className="md:hidden space-y-5 text-center">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-black text-stitch-navy tracking-tight">
-            {t('home.heroTitle')}
-          </h1>
-          <p className="text-xs text-stitch-subtle font-medium">
-            {t('home.heroSubtitle')}
-          </p>
         </div>
 
-        {/* Soft Lavender Voice Orb Box */}
-        <div className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card space-y-4">
-          <SahayakVoiceOrb
-            state={voiceState}
-            setState={setVoiceState}
-            onTranscript={handleVoiceTranscript}
+        {/* Text Input Composer */}
+        <form onSubmit={handleTextSubmit} className="max-w-xl mx-auto relative">
+          <input
+            type="text"
+            value={textInput}
+            onChange={(e) => setTextInput(e.target.value)}
+            placeholder={t('chat.placeholder') || "Ask anything about schemes, applications, or complaints..."}
+            className="w-full pl-5 pr-14 py-3.5 bg-sahayak-canvas border border-sahayak-border rounded-full text-xs md:text-sm font-medium text-sahayak-ink focus:outline-none focus:border-sahayak-primary shadow-xs transition-colors placeholder:text-sahayak-inkMuted"
           />
+          <button
+            type="submit"
+            disabled={!textInput.trim()}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-sahayak-primary hover:bg-sahayak-primaryHover disabled:opacity-40 text-white rounded-full transition-all min-h-touch min-w-touch flex items-center justify-center"
+            title="Send query"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </form>
 
-          <form onSubmit={handleTextSubmit} className="relative">
-            <input
-              type="text"
-              value={textInput}
-              onChange={(e) => setTextInput(e.target.value)}
-              placeholder={t('chat.placeholder')}
-              className="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-full text-xs font-medium focus:outline-none focus:border-stitch-accent"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-stitch-accent hover:text-stitch-navy"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {/* Suggestion Chips */}
-      <div className="space-y-2 text-center md:text-left">
-        <span className="text-[10px] font-extrabold text-stitch-subtle uppercase tracking-wider block">
-          {t('home.suggestions')}
-        </span>
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-          {[
-            { label: t('home.actionSchemesTitle'), icon: Search, query: "Mere paas 2 acre zameen hai Gwalior mein, PM-KISAN ke baare mein batao" },
-            { label: t('home.actionGrievanceTitle'), icon: FileText, query: "Mere area Ward 12 mein 5 din se paani nahi aa raha" },
-            { label: t('home.actionTrackTitle'), icon: Landmark, query: "Meri complaint GRV-2026-894102 ka status kya hai?" }
-          ].map((item, idx) => {
-            const Icon = item.icon;
-            return (
+        {/* Citizen Natural Language Suggestion Chips */}
+        <div className="pt-2 max-w-3xl mx-auto space-y-2">
+          <span className="text-[10px] font-extrabold text-sahayak-inkMuted uppercase tracking-wider block">
+            {t('home.suggestions') || "Suggested Queries — Tap to try"}
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {suggestionChips.map((chip, idx) => (
               <button
                 key={idx}
                 type="button"
-                onClick={() => handlePromptClick(item.query)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-amber-50 border border-slate-200/90 rounded-full text-xs font-bold text-stitch-navy transition-all shadow-2xs"
+                onClick={() => handlePromptClick(chip.query)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-sahayak-surfaceWarm hover:bg-amber-100 border border-sahayak-border rounded-full text-xs font-bold text-sahayak-ink transition-all shadow-xs active:scale-97 min-h-touch"
               >
-                <Icon className="w-3.5 h-3.5 text-stitch-accent" />
-                <span>{item.label}</span>
+                <MessageSquare className="w-3.5 h-3.5 text-sahayak-primary shrink-0" />
+                <span>{chip.label}</span>
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Core Capabilities 3-Card Grid */}
-      <div className="space-y-3 text-left">
-        <div>
-          <h2 className="text-xl font-black text-stitch-navy tracking-tight">{t('home.coreCapabilities')}</h2>
-          <p className="text-xs text-stitch-subtle font-medium">{t('home.coreCapabilitiesDesc')}</p>
+      {/* Feature Highlights Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+        <div
+          onClick={() => navigate('/assistant', { state: { initialMessage: "Mujhe saari yojnayein batao" } })}
+          className="p-5 bg-sahayak-surface border border-sahayak-border rounded-2xl shadow-sahayak-card hover:shadow-sahayak-hover transition-all cursor-pointer space-y-2 group"
+        >
+          <div className="w-9 h-9 rounded-xl bg-sahayak-surfaceWarm text-sahayak-primary flex items-center justify-center font-bold">
+            <Compass className="w-5 h-5" />
+          </div>
+          <h3 className="text-base font-black text-sahayak-ink group-hover:text-sahayak-primary transition-colors">
+            {t('home.actionSchemesTitle') || 'Scheme Discovery'}
+          </h3>
+          <p className="text-xs text-sahayak-inkSoft leading-relaxed font-medium">
+            {t('home.actionSchemesDesc') || 'Find eligible central & state welfare schemes based on age, income, and occupation.'}
+          </p>
+          <div className="flex items-center gap-1 text-xs font-bold text-sahayak-primary pt-1">
+            <span>{t('home.exploreNow') || 'Discover Schemes'}</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div
-            onClick={() => navigate('/assistant', { state: { initialMessage: "Mere liye koi government scheme hai?" } })}
-            className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card hover:shadow-stitch-hover transition-all cursor-pointer space-y-3"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
-              <Landmark className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-stitch-navy">{t('home.actionSchemesTitle')}</h3>
-              <p className="text-xs text-stitch-subtle mt-1 font-medium leading-relaxed">
-                {t('home.actionSchemesDesc')}
-              </p>
-            </div>
-            <div className="flex items-center gap-1 text-xs font-bold text-stitch-accent pt-1">
-              <span>{t('home.exploreNow')}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
+        <div
+          onClick={() => navigate('/assistant', { state: { initialMessage: "Mujhe complaint register karni hai" } })}
+          className="p-5 bg-sahayak-surface border border-sahayak-border rounded-2xl shadow-sahayak-card hover:shadow-sahayak-hover transition-all cursor-pointer space-y-2 group"
+        >
+          <div className="w-9 h-9 rounded-xl bg-red-50 text-sahayak-error flex items-center justify-center font-bold">
+            <ShieldCheck className="w-5 h-5" />
           </div>
-
-          <div
-            onClick={() => navigate('/assistant', { state: { initialMessage: "Mujhe complaint register karni hai" } })}
-            className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card hover:shadow-stitch-hover transition-all cursor-pointer space-y-3"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-red-50 border border-red-100 text-red-700 flex items-center justify-center font-bold">
-              <FileText className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-stitch-navy">{t('home.actionGrievanceTitle')}</h3>
-              <p className="text-xs text-stitch-subtle mt-1 font-medium leading-relaxed">
-                {t('home.actionGrievanceDesc')}
-              </p>
-            </div>
-            <div className="flex items-center gap-1 text-xs font-bold text-stitch-accent pt-1">
-              <span>{t('home.startProcess')}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
+          <h3 className="text-base font-black text-sahayak-ink group-hover:text-sahayak-primary transition-colors">
+            {t('home.actionGrievanceTitle') || 'Grievance Filing'}
+          </h3>
+          <p className="text-xs text-sahayak-inkSoft leading-relaxed font-medium">
+            {t('home.actionGrievanceDesc') || 'Report water, road, electricity, or sanitation issues directly to municipal departments.'}
+          </p>
+          <div className="flex items-center gap-1 text-xs font-bold text-sahayak-primary pt-1">
+            <span>{t('home.startProcess') || 'File Grievance'}</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
+        </div>
 
-          <div
-            onClick={() => navigate('/track')}
-            className="p-6 bg-white border border-slate-200/90 rounded-3xl shadow-stitch-card hover:shadow-stitch-hover transition-all cursor-pointer space-y-3"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-              <Search className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-stitch-navy">{t('home.actionTrackTitle')}</h3>
-              <p className="text-xs text-stitch-subtle mt-1 font-medium leading-relaxed">
-                {t('home.actionTrackDesc')}
-              </p>
-            </div>
-            <div className="flex items-center gap-1 text-xs font-bold text-stitch-accent pt-1">
-              <span>{t('home.checkStatus')}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
+        <div
+          onClick={() => navigate('/track')}
+          className="p-5 bg-sahayak-surface border border-sahayak-border rounded-2xl shadow-sahayak-card hover:shadow-sahayak-hover transition-all cursor-pointer space-y-2 group"
+        >
+          <div className="w-9 h-9 rounded-xl bg-emerald-50 text-sahayak-success flex items-center justify-center font-bold">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <h3 className="text-base font-black text-sahayak-ink group-hover:text-sahayak-primary transition-colors">
+            {t('home.actionTrackTitle') || 'Real-time Tracking'}
+          </h3>
+          <p className="text-xs text-sahayak-inkSoft leading-relaxed font-medium">
+            {t('home.actionTrackDesc') || 'Track application progress and grievance ticket status live with real officer history.'}
+          </p>
+          <div className="flex items-center gap-1 text-xs font-bold text-sahayak-primary pt-1">
+            <span>{t('home.checkStatus') || 'Track Ticket'}</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>
