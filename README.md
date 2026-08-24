@@ -8,7 +8,7 @@
 
 ### Prerequisites
 - **Node.js**: v18+ or v20+
-- **MongoDB** (Optional): A local MongoDB instance or MongoDB Atlas connection string. *Note: If MongoDB is not running, SAHAYAK automatically uses a built-in memory/JSON database fallback so you can test immediately without setup.*
+- **PostgreSQL**: A local PostgreSQL instance.
 
 ### 1. Installation
 Install root dependencies and package modules:
@@ -23,7 +23,7 @@ cd ..
 Create a `.env` file in `server/.env` based on `.env.example`:
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/sahayak_db
+DATABASE_URL=postgresql://sahayak_user:password@localhost:5432/sahayak_db
 JWT_SECRET=sahayak_sih2026_jwt_secret_key
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
@@ -55,7 +55,7 @@ npm run dev
 
 ## 🛠 Tech Stack
 - **Frontend:** React, Vite, Tailwind CSS, Lucide React, i18next, Web Speech API
-- **Backend:** Node.js, Express.js, MongoDB / Memory Fallback, Mongoose, JWT
+- **Backend:** Node.js, Express.js, PostgreSQL, Prisma ORM, pg, @prisma/adapter-pg, Groq SDK, JWT
 - **AI Orchestration & RAG:** Custom modular intent classifier, single-turn slot filler, vector/keyword grounding engine with explicit source citation.
 
 ---
@@ -66,10 +66,10 @@ npm run dev
 server/
 ├── data/
 │   └── schemes.json
-├── models/
-│   ├── Application.js
-│   ├── Grievance.js
-│   └── Scheme.js
+├── prisma/
+│   ├── migrations/
+│   └── schema.prisma
+├── prisma.config.ts
 ├── routes/
 │   ├── ai.js
 │   ├── applications.js
@@ -108,10 +108,63 @@ PATCH /api/officer/grievances/:ticketId
 
 ---
 
+## Current Development Status
+
+### What has been completed
+- Backend PostgreSQL migration
+- Prisma schema
+- Prisma migration
+- Prisma Client generation
+- PostgreSQL seeding
+- Scheme API migration
+- Grievance API migration
+- Officer grievance update migration
+- Application tracking migration
+- AI grievance creation migration
+- AI application creation migration
+- MongoDB/Mongoose removal
+- Local API verification
+
+### What is currently working
+- Express backend is running successfully on port 5000.
+- PostgreSQL is the active backend database and the single source of truth for backend application data.
+- The Prisma Client generates successfully and synchronizes with the PostgreSQL database.
+- `/api/health` successfully returns `status: online`, `dbConnected: true`, `database: postgresql`.
+- Database seeded with 7 government schemes and 5 initial grievances.
+- `GET /api/schemes` returns the 7 seeded schemes.
+- `GET /api/schemes/SCH-001` returns PM Kisan Samman Nidhi data from PostgreSQL.
+- **AI Functionality**: AI orchestration and intent classification flows are functional. `POST /api/ai/understand` successfully classifies requests. `POST /api/ai/orchestrate` successfully returns scheme results.
+- **Grievance Workflow**: The complete grievance workflow was tested end-to-end and is **VERIFIED WORKING**. `POST /api/ai/confirm-grievance` successfully creates grievances in PostgreSQL. `GET /api/grievances/track/:ticketId` retrieves grievances via case-insensitive ticket lookup. `PATCH /api/officer/grievances/:ticketId` updates status and history in PostgreSQL.
+- **Application Workflow**: The application workflow was tested end-to-end and is **VERIFIED WORKING**. `POST /api/ai/confirm-application` successfully creates applications in PostgreSQL. `GET /api/applications/track/:appId` retrieves application data and history from PostgreSQL.
+- **Officer Functionality**: `POST /api/officer/login` was tested with demo credentials and returned a demo token.
+
+### What remains before deployment (NOT YET COMPLETED)
+- Production deployment
+- Production PostgreSQL setup
+- Production environment configuration
+- Frontend production deployment
+- Full production end-to-end testing
+- Final production security hardening
+- Final cleanup/review before merging the migration branch (`postgres-migration`) into `main`.
+
+### Current database architecture
+- PostgreSQL is the primary database.
+- Prisma ORM (v7.9.1) is used for data modeling and access alongside `@prisma/client` and `@prisma/adapter-pg`.
+- Local database details: `sahayak_db` (database), `sahayak_user` (user), `localhost` (host), `5432` (port).
+- The current Prisma schema includes models for `Scheme`, `Application`, and `Grievance`.
+
+### Current backend architecture
+- Node.js, Express.js, PostgreSQL, Prisma ORM, pg, @prisma/adapter-pg, Groq SDK, dotenv, CORS, Nodemon.
+
+### Testing status
+- API endpoints for health, schemes, grievances, applications, AI confirmation flows, and officer updates have been locally verified against the PostgreSQL database.
+
+---
+
 ## Overall Progress
 
 - Backend foundation: COMPLETE
-- MongoDB integration: COMPLETE
+- PostgreSQL migration: COMPLETE
 - Scheme API: FUNCTIONAL
 - AI scheme discovery: FUNCTIONAL
 - Grievance workflow: FUNCTIONAL / VERIFIED END-TO-END
@@ -122,72 +175,26 @@ PATCH /api/officer/grievances/:ticketId
 - Frontend-backend integration: NOT YET FULLY AUDITED
 - Multilingual/voice capabilities: NOT YET FULLY VERIFIED
 
-*Approximate overall backend completion estimate: ~60–70%*
+*Approximate overall backend completion estimate: ~75%*
 
 ---
 
-## What Was Completed and Verified (23 August 2026)
-
-### Backend Infrastructure
-- Express backend is running successfully on port 5000.
-- MongoDB is installed and running locally.
-- Mongoose successfully connects to: `mongodb://localhost:27017/sahayak_db`
-- `/api/health` was tested successfully and returned: `status: online`, `dbConnected: true`.
-- `groq-sdk` dependency was missing initially but was installed successfully with npm.
-- `npm install` completed successfully with no vulnerabilities reported.
-- Backend uses CommonJS and Nodemon for development.
-- Backend dependencies currently include: `express`, `mongoose`, `cors`, `dotenv`, `groq-sdk`, `nodemon`.
-
-### Database / Schemes
-- The database was seeded successfully.
-- 7 government schemes are currently present in MongoDB.
-- `GET /api/schemes` was tested successfully and returned 7 schemes.
-- `GET /api/schemes/SCH-001` was tested successfully (SCH-001 is PM Kisan Samman Nidhi (PM-KISAN)).
-- The scheme record contains fields such as: `schemeId`, `name`, `hindiName`, `ministry`, `sector`, `description`, `purpose`, `targetBeneficiaries`, `benefits`, `documentsRequired`, `applicationSteps`, `officialUrl`, `eligibility`, `sourceMetadata`.
-
-### AI Functionality
-The following endpoints were tested successfully:
-- **POST /api/ai/understand**: Successfully classified a user request as `scheme_discovery`. Note: The tested English message was incorrectly classified as `hinglish`, and the category was returned as `general` (known AI classification quality issue).
-- **POST /api/ai/orchestrate**: Successfully returned `SCHEME_RESULTS`. Successfully returned scheme data for a farmer asking about government schemes. The orchestration flow is functional.
-
-### Grievance Workflow
-The complete grievance workflow was tested end-to-end and is **VERIFIED WORKING**:
-- **POST /api/ai/confirm-grievance**: Successfully created a grievance (GRV-2026-836715).
-- **GET /api/grievances/track/GRV-2026-836715**: Successfully retrieved the grievance from MongoDB. Initial status was `Registered`.
-- **PATCH /api/officer/grievances/GRV-2026-836715**: Successfully updated the grievance to `In Progress` with officer notes persisted.
-- **GET /api/grievances/track/GRV-2026-836715**: Successfully returned the updated status and history in MongoDB.
-
-### Application Workflow
-The application workflow was tested end-to-end and is **VERIFIED WORKING**:
-- **POST /api/ai/confirm-application**: Successfully created a new application (APP-2026-351157, SCH-001 / PM Kisan Samman Nidhi). Initial status: `Submitted`.
-- **GET /api/applications/track/APP-2026-351157**: Successfully retrieved the application from MongoDB with data and history persisted.
-- *Note: Demo/fallback behavior exists for unknown application IDs (e.g., APP-2026-001 returns PM-KISAN / Citizen / Under Verification).*
-
-### Officer Functionality
-- `POST /api/officer/login` was tested with demo credentials and returned a demo token.
-
-> [!CAUTION]
-> **CRITICAL KNOWN ISSUE:**
-> - Officer authentication is currently a demo stub and NOT production-ready.
-> - Incorrect credentials are accepted.
-> - The returned token is a static demo token.
-> - Officer grievance update endpoints are currently not protected by real authentication/authorization.
-> - Proper authentication, JWT/session handling, password hashing, and role-based authorization are still TODO.
+## Historical Architecture (Pre-August 24, 2026)
+Prior to the migration to PostgreSQL, the backend utilized MongoDB and Mongoose. MongoDB was the active database and the source of truth, and a built-in memory/JSON database fallback existed. This has been fully replaced, and MongoDB/Mongoose has been removed from the active backend implementation.
 
 ---
 
-## Known Issues / Next Steps
+## Known Issues
 
 1. **Officer authentication is not secure.** Wrong passwords are accepted, static demo tokens are used, and officer routes are not properly protected.
 2. **AI language classification needs improvement.** An English message was classified as `hinglish`.
 3. **AI category classification needs improvement.** The tested scheme-discovery request returned category `general`.
-4. **AI currently relies on scheme data from `data/schemes.json`** in parts of the orchestration/service layer, while normal scheme APIs use MongoDB. This creates two potential sources of truth and should be consolidated around MongoDB.
-5. **Application tracking contains demo/fallback behavior** for unknown application IDs. This should eventually return a proper 404/not-found response instead of fabricated demo data.
-6. **Request validation is still incomplete.** Add proper validation for API payloads.
-7. **Error handling should be standardized** across APIs.
-8. **Sensitive application information** (e.g., Aadhaar/bank details) requires proper security, minimization, validation, access control, and protection before production use.
-9. **Hindi/multilingual text handling** should be reviewed because some existing source data/strings showed encoding issues during inspection.
-10. **Production security is not complete.** Authentication, authorization, rate limiting, secure CORS configuration, input validation, proper secret management, and logging/monitoring still need work.
+4. **AI currently relies on scheme data from `data/schemes.json`** in parts of the orchestration/service layer, while normal scheme APIs use PostgreSQL. This creates two potential sources of truth and should be consolidated around PostgreSQL.
+5. **Request validation is still incomplete.** Add proper validation for API payloads.
+6. **Error handling should be standardized** across APIs.
+7. **Sensitive application information** (e.g., Aadhaar/bank details) requires proper security, minimization, validation, access control, and protection before production use.
+8. **Hindi/multilingual text handling** should be reviewed because some existing source data/strings showed encoding issues during inspection.
+9. **Production security is not complete.** Authentication, authorization, rate limiting, secure CORS configuration, input validation, proper secret management, and logging/monitoring still need work.
 
 ---
 
@@ -201,7 +208,7 @@ The application workflow was tested end-to-end and is **VERIFIED WORKING**:
 
 **P1:**
 5. Improve AI intent/language/category classification.
-6. Make MongoDB the single source of truth for schemes.
+6. Make PostgreSQL the single source of truth for schemes.
 7. Add request validation.
 8. Standardize API error responses.
 9. Complete multilingual behavior.
@@ -214,15 +221,23 @@ The application workflow was tested end-to-end and is **VERIFIED WORKING**:
 
 ---
 
-**Development checkpoint — 23 August 2026**
+## Next Steps
+
+1. Review and commit the PostgreSQL migration branch.
+2. Merge into main after team review.
+3. Provision production PostgreSQL.
+4. Configure production environment variables.
+5. Deploy backend.
+6. Deploy frontend.
+7. Run complete production end-to-end testing.
+8. Perform final SIH demo readiness review.
+
+---
+
+**Development checkpoint — 24 August 2026**
 Today we:
-- pulled the latest repository changes
-- fixed the missing `groq-sdk` dependency
-- configured the local development environment
-- connected MongoDB
-- seeded 7 schemes
-- verified scheme APIs
-- verified AI understanding/orchestration
-- verified grievance creation, persistence, tracking, and officer status updates
-- verified application creation, persistence, and tracking
+- finalized the PostgreSQL migration on the `postgres-migration` branch
+- removed MongoDB/Mongoose from the backend
+- generated and synchronized Prisma Client
+- verified all AI and core API workflows against PostgreSQL
 - tested officer authentication and identified the critical authentication flaw
