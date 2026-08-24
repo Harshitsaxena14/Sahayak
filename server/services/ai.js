@@ -1,7 +1,6 @@
 const Groq = require("groq-sdk");
 const fs = require("fs");
 const path = require("path");
-const mongoose = require("mongoose");
 
 let groq = null;
 if (process.env.GROQ_API_KEY) {

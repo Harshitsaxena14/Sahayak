@@ -1,19 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
-const Scheme = require('../models/Scheme');
-const Grievance = require('../models/Grievance');
-const Application = require('../models/Application');
+const prisma = require('../lib/prisma');
 
 const DATA_PATH = path.join(__dirname, '../data/schemes.json');
 
 async function seed() {
-  console.log('Seeding SAHAYAK Data Store...');
-  
+  console.log('Seeding SAHAYAK PostgreSQL database...');
+
   if (!fs.existsSync(DATA_PATH)) {
     console.error('Data file server/data/schemes.json not found!');
     process.exit(1);
@@ -22,29 +19,109 @@ async function seed() {
   const raw = fs.readFileSync(DATA_PATH, 'utf-8');
   const data = JSON.parse(raw);
 
-  if (process.env.MONGODB_URI) {
-    try {
-      await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-      console.log('Connected to MongoDB for seeding...');
+  try {
+    // =========================
+    // SEED SCHEMES
+    // =========================
 
-      await Scheme.deleteMany({});
-      await Grievance.deleteMany({});
-      await Application.deleteMany({});
+    if (data.schemes?.length) {
+      console.log(`Seeding ${data.schemes.length} schemes...`);
 
-      if (data.schemes?.length) await Scheme.insertMany(data.schemes);
-      if (data.grievances?.length) await Grievance.insertMany(data.grievances);
-      if (data.applications?.length) await Application.insertMany(data.applications);
+      for (const scheme of data.schemes) {
+        await prisma.scheme.upsert({
+          where: {
+            schemeId: scheme.schemeId
+          },
+          update: {
+            name: scheme.name,
+            hindiName: scheme.hindiName ?? null,
+            ministry: scheme.ministry,
+            sector: scheme.sector,
+            description: scheme.description,
+            purpose: scheme.purpose,
+            targetBeneficiaries: scheme.targetBeneficiaries,
+            eligibility: scheme.eligibility ?? {},
+            benefits: scheme.benefits ?? [],
+            documentsRequired: scheme.documentsRequired ?? [],
+            applicationSteps: scheme.applicationSteps ?? [],
+            officialUrl: scheme.officialUrl,
+            sourceMetadata: scheme.sourceMetadata
+          },
+          create: {
+            schemeId: scheme.schemeId,
+            name: scheme.name,
+            hindiName: scheme.hindiName ?? null,
+            ministry: scheme.ministry,
+            sector: scheme.sector,
+            description: scheme.description,
+            purpose: scheme.purpose,
+            targetBeneficiaries: scheme.targetBeneficiaries,
+            eligibility: scheme.eligibility ?? {},
+            benefits: scheme.benefits ?? [],
+            documentsRequired: scheme.documentsRequired ?? [],
+            applicationSteps: scheme.applicationSteps ?? [],
+            officialUrl: scheme.officialUrl,
+            sourceMetadata: scheme.sourceMetadata
+          }
+        });
+      }
 
-      console.log('MongoDB Seed Completed Successfully!');
-      await mongoose.disconnect();
-    } catch (err) {
-      console.log('MongoDB Seeding skipped (using JSON file fallback):', err.message);
+      console.log('Schemes seeded successfully.');
     }
-  } else {
-    console.log('JSON Data Fallback Verified (Schemes:', data.schemes?.length, 'Grievances:', data.grievances?.length, ')');
-  }
 
-  console.log('Seeding procedure finished.');
+    // =========================
+    // SEED GRIEVANCES
+    // =========================
+
+    if (data.grievances?.length) {
+      console.log(`Seeding ${data.grievances.length} grievances...`);
+
+      for (const grievance of data.grievances) {
+        await prisma.grievance.upsert({
+          where: {
+            ticketId: grievance.ticketId
+          },
+          update: {
+            category: grievance.category,
+            department: grievance.department,
+            location: grievance.location,
+            duration: grievance.duration ?? null,
+            description: grievance.description,
+            citizenPhone: grievance.citizenPhone ?? 'Simulated Citizen',
+            status: grievance.status ?? 'Registered',
+            priority: grievance.priority ?? 'Medium',
+            history: grievance.history ?? [],
+            resolutionNotes: grievance.resolutionNotes ?? '',
+            assignedOfficer: grievance.assignedOfficer ?? 'Unassigned'
+          },
+          create: {
+            ticketId: grievance.ticketId,
+            category: grievance.category,
+            department: grievance.department,
+            location: grievance.location,
+            duration: grievance.duration ?? null,
+            description: grievance.description,
+            citizenPhone: grievance.citizenPhone ?? 'Simulated Citizen',
+            status: grievance.status ?? 'Registered',
+            priority: grievance.priority ?? 'Medium',
+            history: grievance.history ?? [],
+            resolutionNotes: grievance.resolutionNotes ?? '',
+            assignedOfficer: grievance.assignedOfficer ?? 'Unassigned'
+          }
+        });
+      }
+
+      console.log('Grievances seeded successfully.');
+    }
+
+    console.log('PostgreSQL seed completed successfully.');
+  } catch (error) {
+    console.error('PostgreSQL seeding failed:');
+    console.error(error);
+    process.exitCode = 1;
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 seed();

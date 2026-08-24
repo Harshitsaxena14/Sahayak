@@ -1,9 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
 
 dotenv.config();
+
+const prisma = require('./lib/prisma');
 
 const schemeRoutes = require('./routes/schemes');
 const grievanceRoutes = require('./routes/grievances');
@@ -23,18 +24,26 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/officer', officerRoutes);
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'online',
-    dbConnected: mongoose.connection.readyState === 1
-  });
-});
+app.get('/api/health', async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/sahayak_db', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log('MongoDB connection warning (falling back to local data):', err.message));
+    res.json({
+      status: 'online',
+      dbConnected: true,
+      database: 'postgresql'
+    });
+  } catch (error) {
+    console.error('Database health check failed:', error);
+
+    res.status(503).json({
+      status: 'online',
+      dbConnected: false,
+      database: 'postgresql',
+      error: error.message
+    });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

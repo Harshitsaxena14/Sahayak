@@ -2,11 +2,10 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
-const mongoose = require("mongoose");
+const prisma = require("../lib/prisma");
 
 const { processQuery, orchestrateTurn } = require("../services/ai");
-const Grievance = require("../models/Grievance");
-const Application = require("../models/Application");
+
 
 const DATA_PATH = path.join(__dirname, "../data/schemes.json");
 
@@ -91,14 +90,22 @@ router.post("/confirm-grievance", async (req, res) => {
       resolutionNotes: ""
     };
 
-    if (mongoose.connection.readyState === 1) {
-      await Grievance.create(newTicket);
-    } else {
-      const data = readJsonData();
-      if (!data.grievances) data.grievances = [];
-      data.grievances.unshift(newTicket);
-      writeJsonData(data);
-    }
+    await prisma.grievance.create({
+  data: {
+    ticketId: newTicket.ticketId,
+    category: newTicket.category,
+    department: newTicket.department,
+    location: newTicket.location,
+    duration: newTicket.duration,
+    description: newTicket.description,
+    citizenPhone: newTicket.citizenPhone,
+    status: newTicket.status,
+    priority: newTicket.priority,
+    assignedOfficer: newTicket.assignedOfficer,
+    history: newTicket.history,
+    resolutionNotes: newTicket.resolutionNotes
+  }
+});
 
     res.json({ success: true, ticket: newTicket });
   } catch (error) {
@@ -130,14 +137,17 @@ router.post("/confirm-application", async (req, res) => {
       ]
     };
 
-    if (mongoose.connection.readyState === 1) {
-      await Application.create(newApp);
-    } else {
-      const data = readJsonData();
-      if (!data.applications) data.applications = [];
-      data.applications.unshift(newApp);
-      writeJsonData(data);
-    }
+  await prisma.application.create({
+  data: {
+    applicationId: newApp.applicationId,
+    schemeId: newApp.schemeId,
+    schemeName: newApp.schemeName,
+    applicantName: newApp.applicantName,
+    details: newApp.details,
+    status: newApp.status,
+    history: newApp.history
+  }
+});
 
     res.json({ success: true, application: newApp });
   } catch (error) {

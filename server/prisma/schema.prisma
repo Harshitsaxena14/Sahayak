@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Scheme {
+  id                  Int     @id @default(autoincrement())
+  schemeId            String  @unique @map("scheme_id")
+  name                String
+  hindiName           String? @map("hindi_name")
+  ministry            String
+  sector              String
+  description         String
+  purpose             String
+  targetBeneficiaries String  @map("target_beneficiaries")
+
+  eligibility       Json
+  benefits          Json
+  documentsRequired Json @map("documents_required")
+  applicationSteps  Json @map("application_steps")
+
+  officialUrl    String @map("official_url")
+  sourceMetadata String @map("source_metadata")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("schemes")
+}
+
+model Application {
+  id            Int    @id @default(autoincrement())
+  applicationId String @unique @map("application_id")
+  schemeId      String @default("SCH-001") @map("scheme_id")
+  schemeName    String @map("scheme_name")
+  applicantName String @default("Citizen") @map("applicant_name")
+  details       Json   @default("{}")
+
+  status String @default("Submitted")
+
+  history Json @default("[]")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("applications")
+}
+
+model Grievance {
+  id           Int     @id @default(autoincrement())
+  ticketId     String  @unique @map("ticket_id")
+  category     String
+  department   String
+  location     String
+  duration     String?
+  description  String
+  citizenPhone String  @default("Simulated Citizen") @map("citizen_phone")
+
+  status   String @default("Registered")
+  priority String @default("Medium")
+
+  history Json @default("[]")
+
+  resolutionNotes String @default("") @map("resolution_notes")
+  assignedOfficer String @default("Unassigned") @map("assigned_officer")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("grievances")
+}
